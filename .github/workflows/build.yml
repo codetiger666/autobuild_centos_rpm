@@ -16,9 +16,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
  
-    # - name: runc-centos
-    #   run: |
-    #     docker run -itd -v work:/work centos:7
+    - name:init-centos
+      run: |
+        yum install wget curl openssh epel-release -y
         
     # - name: SSH connection to Actions1
     #   uses: P3TERX/ssh2actions@main
