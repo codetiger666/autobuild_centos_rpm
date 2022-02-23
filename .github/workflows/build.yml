@@ -18,7 +18,7 @@ jobs:
  
     - name: init-centos
       run: |
-        yum install wget curl openssh epel-release -y
+        yum install wget curl openssh epel-release unzip sudo -y
         
     # - name: SSH connection to Actions1
     #   uses: P3TERX/ssh2actions@main
