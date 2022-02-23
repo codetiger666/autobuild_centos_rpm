@@ -8,24 +8,52 @@ on:
           default: 'false'
   schedule:
     - cron: 0 10 * * *
+
+env:
+  env:
+  CONFIG_FILE: newifi_D2.config
+  DRIVE_LABLE: newifi_D2
+  UPLOAD_RELEASE: true
+  UPLOAD_FIRMWARE: true
+  UPLOAD_BIN_DIR: false
+  REMOVE_OLD_RELEASE: true
+  REMOVE_WORKFLOW_RUNS: true
+  KERNEL_HASH: 7318552cb8f6798b0a6d707a2f563d94
+
+
 jobs:     
   build:
     name: build
     runs-on: ubuntu-latest
-    container: docker.io/centos:7
     steps:
     - uses: actions/checkout@v2
- 
-    - name: init-centos
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        useradd runer 2>/dev/null
-        yum install wget curl openssh epel-release unzip sudo screen -y
+        sudo rm -rf /etc/localtime
+        sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+        sudo apt remove php* dotnet* google* 
+        docker rmi `docker images -q`
+        sudo rm -rf \
+          /usr/share/dotnet \
+          /etc/mysql \
+          /etc/php
+ 
+    - name: run-centos
+      run: |
+        cd
+        mkdir rpm
+        centos=`docker run -itd -v rpm:/root centos:7`
+        echo "export centos=$centos" >> .profile
+        docker exec -itd $centos /bin/bash
+        yum install epel-release wget curl rpm-build rpmdevtools -y
+        rpmdev-setuptree
         
-    # - name: SSH connection to Actions1
-    #   uses: P3TERX/ssh2actions@main
-    #   env:
-    #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-    #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    - name: init-build
+      run: |
+        echo "1111"
 
     - name: Start SSH via ngrok
       uses: P3TERX/ssh2actions@main
