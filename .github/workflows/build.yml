@@ -164,7 +164,7 @@ jobs:
         # # 更改日志
         # %changelog
         # EOF
-        docker exec -i $centos wget -P ~/rpmbuild/SOURCES https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
+        # docker exec -i $centos wget -P ~/rpmbuild/SOURCES https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
 
 
     - name: Start SSH via ngrok
