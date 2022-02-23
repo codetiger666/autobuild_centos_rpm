@@ -43,7 +43,7 @@ jobs:
       run: |
         /bin/cp openresty/nginx.service rpm/SOURCES
         /bin/cp openresty/default.conf rpm/SOURCES
-        /bin/cp openresty/.rpmmacros rpm
+        sudo /bin/cp openresty/.rpmmacros rpm
         # docker exec -i $centos cat <<EOF >/root/.rpmmacros
         # %_topdir %(echo $HOME)/rpmbuild
         # %_smp_mflags %( \
