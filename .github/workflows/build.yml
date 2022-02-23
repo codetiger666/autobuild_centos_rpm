@@ -1,0 +1,26 @@
+name: build——rpm
+on:
+  workflow_dispatch:
+      inputs:
+        ssh:
+          description: 'SSH connection to Actions'
+          required: true
+          default: 'false'
+  schedule:
+    - cron: 0 10 * * *
+jobs:     
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+ 
+    - name: runc-centos
+      run: |
+        docker run -itd -v ./work:/work centos:7
+        
+    - name: SSH connection to Actions1
+      uses: P3TERX/ssh2actions@main
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
