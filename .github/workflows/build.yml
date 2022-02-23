@@ -36,16 +36,14 @@ jobs:
         mkdir rpm
         centos=`docker run -itd -v $(pwd)/rpm:/root centos:7`
         echo "export centos=$centos" >> .profile
-        docker exec -i $centos /bin/bash
-        yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
-        rpmdev-setuptree
+        docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
+        docker exec -i $centos rpmdev-setuptree
         
     - name: init-build
       run: |
         /bin/cp autobuild_centos_rpm/openresty/nginx.service rpm/SOURCES
         /bin/cp autobuild_centos_rpm/openresty/default.conf rpm/SOURCES
-        docker exec -i $centos /bin/bash
-        cat <<EOF >/root/.rpmmacros
+        docker exec -i $centos cat <<EOF >/root/.rpmmacros
         %_topdir %(echo $HOME)/rpmbuild
         %_smp_mflags %( \
             [ -z "$RPM_BUILD_NCPUS" ] \\\
@@ -63,9 +61,7 @@ jobs:
             case "${QA_CHECK_RPATHS:-}" in [1yY]*) /usr/lib/rpm/check-rpaths ;; esac \
             /usr/lib/rpm/check-buildroot
         EOF
-        cd ~/rpmbuild
-        cd SPECS
-        cat << EOF >openresty.spec
+        docker exec -i $centos cat << EOF >~/rpmbuild/SPECS/openresty.spec
         %define prefix /usr/local/nginx
         Name:          openresty
         Version:        $OPENRESTYVERSION
@@ -167,8 +163,8 @@ jobs:
         # 更改日志
         %changelog
         EOF
-        cd ~/rpmbuild/SOURCES
-        wget https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
+        docker exec -i $centos cd ~/rpmbuild/SOURCES
+        docker exec -i $centos wget https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
 
 
     - name: Start SSH via ngrok
@@ -190,8 +186,8 @@ jobs:
     - name: run-build
       run: |
         docker exec -i $centos /bin/bash
-        cd ~/rpmbuild
-        rpmbuild -ba ./SPECS/openresty.spec
+        docker exec -i $centos rpmbuild -ba ~/rpmbuild/SPECS/openresty.spec
+        
 
     - name: Start SSH via ngrok2
       uses: P3TERX/ssh2actions@main
