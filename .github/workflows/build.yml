@@ -41,8 +41,8 @@ jobs:
         
     - name: init-build
       run: |
-        /bin/cp openresty/nginx.service rpm/rpmbuild/SOURCES
-        /bin/cp openresty/default.conf rpm/rpmbuild/SOURCES
+        sudo /bin/cp openresty/nginx.service rpm/rpmbuild/SOURCES
+        sudo /bin/cp openresty/default.conf rpm/rpmbuild/SOURCES
         sudo /bin/cp openresty/.rpmmacros rpm
         cat << EOF >openresty.spec
         %define prefix /usr/local/nginx
