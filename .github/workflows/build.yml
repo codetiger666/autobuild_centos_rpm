@@ -36,7 +36,7 @@ jobs:
         mkdir rpm
         centos=`docker run -itd -v $(pwd)/rpm:/root centos:7`
         echo "export centos=$centos" >> .profile
-        docker exec -it $centos /bin/bash
+        docker exec -i $centos /bin/bash
         yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
         rpmdev-setuptree
         
@@ -44,7 +44,7 @@ jobs:
       run: |
         /bin/cp autobuild_centos_rpm/openresty/nginx.service rpm/SOURCES
         /bin/cp autobuild_centos_rpm/openresty/default.conf rpm/SOURCES
-        docker exec -it $centos /bin/bash
+        docker exec -i $centos /bin/bash
         cat <<EOF >/root/.rpmmacros
         %_topdir %(echo $HOME)/rpmbuild
         %_smp_mflags %( \
@@ -189,7 +189,7 @@ jobs:
 
     - name: run-build
       run: |
-        docker exec -it $centos /bin/bash
+        docker exec -i $centos /bin/bash
         cd ~/rpmbuild
         rpmbuild -ba ./SPECS/openresty.spec
 
