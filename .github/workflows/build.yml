@@ -41,15 +41,15 @@ jobs:
           /etc/mysql \
           /etc/php
  
-    - name: run-centos
-      run: |
-        cd
-        mkdir rpm
-        centos=`docker run -itd -v rpm:/root centos:7`
-        echo "export centos=$centos" >> .profile
-        docker exec -itd $centos /bin/bash
-        yum install epel-release wget curl rpm-build rpmdevtools -y
-        rpmdev-setuptree
+    # - name: run-centos
+    #   run: |
+    #     cd
+    #     mkdir rpm
+    #     centos=`docker run -itd -v rpm:/root centos:7`
+    #     echo "export centos=$centos" >> .profile
+    #     docker exec -itd $centos /bin/bash
+    #     yum install epel-release wget curl rpm-build rpmdevtools -y
+    #     rpmdev-setuptree
         
     - name: init-build
       run: |
