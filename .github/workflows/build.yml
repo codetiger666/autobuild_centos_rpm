@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
  
-    - name:init-centos
+    - name: init-centos
       run: |
         yum install wget curl openssh epel-release -y
         
