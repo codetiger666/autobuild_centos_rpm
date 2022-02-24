@@ -195,19 +195,29 @@ jobs:
         git add ./
         git commit -m "update openresty"
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@master
+    #   with:
+    #     directory: ./centos_rpms
+    #     repository: codetiger666/centos_rpms
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     branch: main
+    - name: Pushes to another repository
+      uses: cpina/github-action-push-to-another-repository@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
       with:
-        directory: ./centos_rpms
-        repository: codetiger666/centos_rpms
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
+        source-directory: 'centos_rpms'
+        destination-github-username: 'codetiger666'
+        destination-repository-name: 'centos_rpms'
+        user-email: nnweb365@gmail.com
+        target-branch: main
 
     - name: Start SSH via ngrok2
       uses: P3TERX/ssh2actions@main
       with:
         mode: ngrok
-      # if: failure()
+      if: failure()
       env:
         # After sign up on the https://ngrok.com
         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
