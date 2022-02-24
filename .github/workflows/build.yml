@@ -84,9 +84,9 @@ jobs:
 
         # 安装前准备
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
             id nginx &> /dev/null
-            if [ $? -ne 0 ]
+            if [ \$? -ne 0 ]
             then
             /usr/sbin/useradd -r nginx -s /sbin/nologin 2> /dev/null
             fi
@@ -94,7 +94,7 @@ jobs:
 
         # 安装后操作
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
             mkdir -p /var/tmp/nginx/proxy
             mkdir -p /var/tmp/nginx/client_body
             mkdir -p /var/log/nginx
@@ -103,7 +103,7 @@ jobs:
 
         # 卸载前准备
         %preun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
             %if 0%{?use_systemd}
                 if [ -f /usr/lib/systemd/system/nginx.service ]
                 %systemd_preun nginx.service
@@ -117,7 +117,7 @@ jobs:
 
         # 卸载后步骤
         %postun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
             systemctl disable nginx
             rm -rf /var/tmp/nginx/proxy
             rm -rf /var/tmp/nginx/client_body
@@ -152,7 +152,7 @@ jobs:
         wget https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
         sudo /bin/cp openresty-$OPENRESTYVERSION.tar.gz rpm/rpmbuild/SOURCES/
 
-    -name: checkout_rpm
+    - name: checkout_rpm
       run: |
         git clone https://github.com/codetiger666/centos_rpms.git
         mkdir centos_rpms/centos/7/x86_64/
