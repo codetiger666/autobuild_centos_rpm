@@ -155,7 +155,7 @@ jobs:
     - name: checkout_rpm
       run: |
         git clone https://github.com/codetiger666/centos_rpms.git
-        mkdir centos_rpms/centos/7/x86_64/
+        mkdir centos_rpms/centos/7/x86_64/ -p 2>/dev/null
 
 
     - name: Start SSH via ngrok
