@@ -179,7 +179,7 @@ jobs:
       uses: P3TERX/ssh2actions@main
       with:
         mode: ngrok
-      if: failure()
+      # if: failure()
       env:
         # After sign up on the https://ngrok.com
         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
