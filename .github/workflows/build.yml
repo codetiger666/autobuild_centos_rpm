@@ -36,6 +36,7 @@ jobs:
         mkdir rpm
         centos=`docker run -itd -v $(pwd)/rpm:/root centos:7`
         echo "export centos=$centos" >> $HOME/.profile
+        source $HOME/.profile
         docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
         docker exec -i $centos rpmdev-setuptree
         
