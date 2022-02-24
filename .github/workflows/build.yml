@@ -152,6 +152,12 @@ jobs:
         wget https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
         sudo /bin/cp openresty-$OPENRESTYVERSION.tar.gz rpm/rpmbuild/SOURCES/
 
+    -name: checkout_rpm
+      run: |
+        git clone https://github.com/codetiger666/centos_rpms.git
+        mkdir centos_rpms/centos/7/x86_64/
+
+
     - name: Start SSH via ngrok
       uses: P3TERX/ssh2actions@main
       with:
@@ -174,6 +180,28 @@ jobs:
         source $HOME/.profile
         docker exec -i $centos rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
         
+    - name: copy realease
+      run: |
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.el7.x86_64.rpm centos_rpms/centos/7/x86_64/
+        rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms centos:7`
+        docker exec -i $rpms yum install createrepo -y
+        docker exec -i $rpms createrepo /centos_rpms/centos/7/x86_64/ 
+
+    - name: git add
+      working-directory: ./centos_rpms
+      run: |
+        git config --local user.email "nnweb365@gmail.com"
+        git config --local user.name "codetiger666"
+        git add ./
+        git commit -m "update openresty"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      working-directory: ./centos_rpms
+      with:
+        repository: centos_rpms
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
 
     - name: Start SSH via ngrok2
       uses: P3TERX/ssh2actions@main
