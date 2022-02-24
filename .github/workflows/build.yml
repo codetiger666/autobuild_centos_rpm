@@ -197,8 +197,8 @@ jobs:
 
     - name: Push changes
       uses: ad-m/github-push-action@master
-      working-directory: ./centos_rpms
       with:
+        directory: ./centos_rpms
         repository: centos_rpms
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
