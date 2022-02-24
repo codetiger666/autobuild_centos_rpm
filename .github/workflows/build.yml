@@ -170,7 +170,7 @@ jobs:
 
     - name: run-build
       run: |
-        docker exec -i $centos rpmbuild -ba ~/rpmbuild/SPECS/openresty.spec
+        docker exec -i $centos rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
         
 
     - name: Start SSH via ngrok2
