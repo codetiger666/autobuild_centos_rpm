@@ -199,7 +199,7 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         directory: ./centos_rpms
-        repository: centos_rpms
+        repository: codetiger666/centos_rpms
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
 
