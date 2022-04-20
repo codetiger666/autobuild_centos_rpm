@@ -80,6 +80,7 @@ jobs:
         rm -rf $RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{prefix}/nginx.conf
+        %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{prefix}/conf.d/default.conf
         %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}%{_usr}/lib/systemd/system/nginx.service
 
         # 安装前准备
