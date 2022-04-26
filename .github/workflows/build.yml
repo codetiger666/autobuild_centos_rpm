@@ -13,7 +13,225 @@ env:
   OPENRESTYVERSION: 1.19.9.1
 
 jobs:     
-  build:
+  # centos-build-openresty:
+  #   name: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Initialization environment
+  #     env:
+  #       DEBIAN_FRONTEND: noninteractive
+  #     run: |
+  #       sudo rm -rf /etc/localtime
+  #       sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+  #       # sudo apt remove php* dotnet* google* 
+  #       sudo rm -rf \
+  #         /usr/share/dotnet \
+  #         /etc/mysql \
+  #         /etc/php
+ 
+  #   - name: run-centos
+  #     run: |
+  #       mkdir rpm
+  #       centos=`docker run -itd -v $(pwd)/rpm:/root centos:7`
+  #       echo "export centos=$centos" >> $HOME/.profile
+  #       source $HOME/.profile
+  #       docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
+  #       docker exec -i $centos rpmdev-setuptree
+        
+  #   - name: init-build
+  #     run: |
+  #       sudo /bin/cp openresty/nginx.service rpm/rpmbuild/SOURCES
+  #       sudo /bin/cp openresty/default.conf rpm/rpmbuild/SOURCES
+  #       sudo /bin/cp openresty/nginx.conf rpm/rpmbuild/SOURCES
+  #       sudo /bin/cp openresty/.rpmmacros rpm
+  #       cat << EOF >openresty.spec
+  #       %define prefix /usr/local/nginx
+  #       Name:          openresty
+  #       Version:        $OPENRESTYVERSION
+  #       Release:        1%{?dist}
+  #       Summary:        openresty编译
+
+  #       License:        GPL
+  #       URL:            https://gybyt.cn
+  #       Source0:        https://openresty.org/download/%{name}-%{version}.tar.gz
+  #       Source1:        nginx.conf
+  #       Source2:        nginx.service
+  #       Source3:        default.conf
+
+  #       BuildRequires:  perl pcre-devel openssl-devel gcc gd  libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel libstdc++ perl-ExtUtils-Embed gd-devel
+  #       Requires:       pcre openssl cmake gcc libxml2 libxslt gd geoip libstdc++
+
+  #       # 描述
+  #       %description
+  #       openresty编译
+
+  #       # 编译前准备
+  #       %prep
+  #       %setup -q
+
+  #       # 编译
+  #       %build
+  #       CFLAGS="-fPIC" ./configure --prefix=/usr/local/nginx --sbin-path=/usr/sbin/nginx --conf-path=/usr/local/nginx/nginx.conf --pid-path=/var/run/nginx.pid --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --lock-path=/var/lock/nginx.lock --with-luajit --with-http_gunzip_module --with-pcre --with-pcre-jit --with-http_perl_module --with-ld-opt="-Wl,-E" --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_geoip_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-select_module --with-poll_module --with-file-aio --with-http_degradation_module --with-libatomic --http-client-body-temp-path=/var/tmp/nginx/client_body --http-proxy-temp-path=/var/tmp/nginx/proxy --http-fastcgi-temp-path=/var/tmp/nginx/fastcgi --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi --http-scgi-temp-path=/var/tmp/nginx/scgi -j6
+  #       make -j6
+
+  #       # 安装
+  #       %install
+  #       rm -rf $RPM_BUILD_ROOT
+  #       make install DESTDIR=%{buildroot}
+  #       %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{prefix}/nginx.conf
+  #       %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{prefix}/conf.d/default.conf
+  #       %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}%{_usr}/lib/systemd/system/nginx.service
+
+  #       # 安装前准备
+  #       %pre
+  #       if [ \$1 == 1 ]; then
+  #           id nginx &> /dev/null
+  #           if [ \$? -ne 0 ]
+  #           then
+  #           /usr/sbin/useradd -r nginx -s /sbin/nologin 2> /dev/null
+  #           fi
+  #       fi
+
+  #       # 安装后操作
+  #       %post
+  #       if [ \$1 == 1 ]; then
+  #           mkdir -p /var/tmp/nginx/proxy
+  #           mkdir -p /var/tmp/nginx/client_body
+  #           mkdir -p /var/log/nginx
+  #           mkdir -p /usr/local/nginx/conf.d
+  #       fi
+
+  #       # 卸载前准备
+  #       %preun
+  #       if [ \$1 == 0 ]; then
+  #           %if 0%{?use_systemd}
+  #               if [ -f /usr/lib/systemd/system/nginx.service ]
+  #               %systemd_preun nginx.service
+  #               fi
+  #           %endif
+  #           count=`ps -ef |grep nginx |grep -v "grep" |wc -l`
+  #           if [ $count -gt 0 ]; then
+  #           nginx -s stop
+  #           fi
+  #       fi
+
+  #       # 卸载后步骤
+  #       %postun
+  #       if [ \$1 == 0 ]; then
+  #           systemctl disable nginx
+  #           rm -rf /var/tmp/nginx/proxy
+  #           rm -rf /var/tmp/nginx/client_body
+  #           rm -rf /usr/lib/systemd/system/nginx.service
+  #           rm -rf /var/tmp/nginx
+  #           rm -rf /var/log/nginx
+  #           rm -rf /usr/local/lib64/perl5/auto/nginx
+  #           rm -rf /usr/local/nginx
+  #           userdel nginx
+  #           systemctl daemon-reload
+  #       fi
+
+  #       # 文件列表
+  #       %files
+  #       %defattr(-,root,root,0755)
+  #       %{_usr}/lib64/perl5/perllocal.pod
+  #       %{_usr}/local/lib64/perl5/auto/nginx/.packlist
+  #       %{_usr}/local/lib64/perl5/auto/nginx/nginx.bs
+  #       %{_usr}/local/lib64/perl5/auto/nginx/nginx.so
+  #       %{_usr}/local/lib64/perl5/nginx.pm
+  #       %{_usr}/local/share/man/man3/nginx.3pm
+  #       %{_sbindir}/nginx
+  #       %{_usr}/local/nginx/
+  #       %{_usr}/lib/systemd/system/nginx.service
+  #       # 文档
+  #       %doc
+
+  #       # 更改日志
+  #       %changelog
+  #       EOF
+  #       sudo /bin/cp openresty.spec rpm/rpmbuild/SPECS/
+  #       wget https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
+  #       sudo /bin/cp openresty-$OPENRESTYVERSION.tar.gz rpm/rpmbuild/SOURCES/
+
+  #   - name: checkout_rpm
+  #     run: |
+  #       git clone https://github.com/codetiger666/centos_rpms.git
+  #       mkdir centos_rpms/centos/7/x86_64/ -p 2>/dev/null
+
+
+  #   - name: Start SSH via ngrok
+  #     uses: P3TERX/ssh2actions@main
+  #     with:
+  #       mode: ngrok
+  #     if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+  #     env:
+  #       # After sign up on the https://ngrok.com
+  #       # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
+  #       NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        
+  #       # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
+  #       # You can find this server region here: https://ngrok.com/docs#global-locations
+  #       NGROK_REGION: jp
+
+  #       # This password you will use when authorizing via SSH
+  #       SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+
+  #   - name: run-build
+  #     run: |
+  #       source $HOME/.profile
+  #       docker exec -i $centos rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
+        
+  #   - name: copy realease
+  #     run: |
+  #       sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.el7.x86_64.rpm centos_rpms/centos/7/x86_64/
+  #       rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms centos:7`
+  #       docker exec -i $rpms yum install createrepo -y
+  #       docker exec -i $rpms createrepo /centos_rpms/centos/7/x86_64/ 
+
+  #   - name: git add
+  #     working-directory: ./centos_rpms
+  #     run: |
+  #       git config --local user.email "nnweb365@gmail.com"
+  #       git config --local user.name "codetiger666"
+  #       git add ./
+  #       git commit -m "update openresty"
+
+  #   # - name: Push changes
+  #   #   uses: ad-m/github-push-action@master
+  #   #   with:
+  #   #     directory: ./centos_rpms
+  #   #     repository: codetiger666/centos_rpms
+  #   #     github_token: ${{ secrets.GITHUB_TOKEN }}
+  #   #     branch: main
+  #   - name: Pushes to another repository
+  #     uses: cpina/github-action-push-to-another-repository@main
+  #     env:
+  #       API_TOKEN_GITHUB: ${{ secrets.GITHUBTOKEN }}
+  #     with:
+  #       source-directory: 'centos_rpms'
+  #       destination-github-username: 'codetiger666'
+  #       destination-repository-name: 'centos_rpms'
+  #       user-email: nnweb365@gmail.com
+  #       target-branch: main
+
+  #   - name: Start SSH via ngrok2
+  #     uses: P3TERX/ssh2actions@main
+  #     with:
+  #       mode: ngrok
+  #     if: failure()
+  #     env:
+  #       # After sign up on the https://ngrok.com
+  #       # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
+  #       NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        
+  #       # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
+  #       # You can find this server region here: https://ngrok.com/docs#global-locations
+  #       NGROK_REGION: jp
+
+  #       # This password you will use when authorizing via SSH
+  #       SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+  openeuler-build-openresty:
     name: build
     runs-on: ubuntu-latest
     steps:
@@ -31,14 +249,14 @@ jobs:
           /etc/mysql \
           /etc/php
  
-    - name: run-centos
+    - name: run-openeuler
       run: |
         mkdir rpm
-        centos=`docker run -itd -v $(pwd)/rpm:/root centos:7`
-        echo "export centos=$centos" >> $HOME/.profile
+        openeuler=`docker run -itd -v $(pwd)/rpm:/root openeuler/openeuler:22.03-lts`
+        echo "export openeuler=$openeuler" >> $HOME/.profile
         source $HOME/.profile
-        docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
-        docker exec -i $centos rpmdev-setuptree
+        docker exec -i $openeuler yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
+        docker exec -i $openeuler rpmdev-setuptree
         
     - name: init-build
       run: |
@@ -137,7 +355,6 @@ jobs:
         %defattr(-,root,root,0755)
         %{_usr}/lib64/perl5/perllocal.pod
         %{_usr}/local/lib64/perl5/auto/nginx/.packlist
-        %{_usr}/local/lib64/perl5/auto/nginx/nginx.bs
         %{_usr}/local/lib64/perl5/auto/nginx/nginx.so
         %{_usr}/local/lib64/perl5/nginx.pm
         %{_usr}/local/share/man/man3/nginx.3pm
@@ -157,7 +374,7 @@ jobs:
     - name: checkout_rpm
       run: |
         git clone https://github.com/codetiger666/centos_rpms.git
-        mkdir centos_rpms/centos/7/x86_64/ -p 2>/dev/null
+        mkdir centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/ -p 2>/dev/null
 
 
     - name: Start SSH via ngrok
@@ -184,10 +401,10 @@ jobs:
         
     - name: copy realease
       run: |
-        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.el7.x86_64.rpm centos_rpms/centos/7/x86_64/
-        rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms centos:7`
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.el7.x86_64.rpm centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/
+        rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms openeuler/openeuler:22.03-lts`
         docker exec -i $rpms yum install createrepo -y
-        docker exec -i $rpms createrepo /centos_rpms/centos/7/x86_64/ 
+        docker exec -i $rpms createrepo /centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/
 
     - name: git add
       working-directory: ./centos_rpms
@@ -195,7 +412,7 @@ jobs:
         git config --local user.email "nnweb365@gmail.com"
         git config --local user.name "codetiger666"
         git add ./
-        git commit -m "update openresty"
+        git commit -m "update openeuler openresty"
 
     # - name: Push changes
     #   uses: ad-m/github-push-action@master
