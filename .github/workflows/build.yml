@@ -255,7 +255,7 @@ jobs:
         openeuler=`docker run -itd -v $(pwd)/rpm:/root openeuler/openeuler:22.03-lts`
         echo "export openeuler=$openeuler" >> $HOME/.profile
         source $HOME/.profile
-        docker exec -i $openeuler yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
+        docker exec -i $openeuler yum install wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
         docker exec -i $openeuler rpmdev-setuptree
         
     - name: init-build
