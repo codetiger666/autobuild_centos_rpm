@@ -518,8 +518,8 @@ jobs:
           Source2:	sendmail.sh
           Source3:	zabbix_server.service
 
-          BuildRequires:	mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel mysql-community-libs-compat net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
-          Requires:	net-snmp mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel mysql-community-libs-compat libssh2 OpenIPMI libevent openldap libcurl
+          BuildRequires:	MariaDB-client MariaDB-common mariadb-libs MariaDB-devel MariaDB-compat net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
+          Requires:	net-snmp MariaDB-client MariaDB-common mariadb-libs MariaDB-devel MariaDB-compat libssh2 OpenIPMI libevent openldap libcurl
 
           %description
           zabbix服务端后端自编译
