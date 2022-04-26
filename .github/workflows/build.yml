@@ -14,7 +14,7 @@ env:
 
 jobs:     
   centos-build-openresty:
-    name: build
+    name: centos-build-openresty
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -239,7 +239,7 @@ jobs:
         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
 
   openeuler-build-openresty:
-    name: build
+    name: openeuler-build-openresty
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
