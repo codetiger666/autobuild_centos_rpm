@@ -401,7 +401,7 @@ jobs:
         
     - name: copy realease
       run: |
-        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.el7.x86_64.rpm centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.x86_64.rpm centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/openresty-$OPENRESTYVERSION.x86_64.rpm
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms openeuler/openeuler:22.03-lts`
         docker exec -i $rpms yum install createrepo -y
         docker exec -i $rpms createrepo /centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/
