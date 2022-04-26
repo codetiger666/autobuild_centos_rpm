@@ -397,7 +397,7 @@ jobs:
     - name: run-build
       run: |
         source $HOME/.profile
-        docker exec -i $centos rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
+        docker exec -i $openeuler rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
         
     - name: copy realease
       run: |
