@@ -11,7 +11,7 @@ on:
 
 env:
   OPENRESTYVERSION: 1.19.9.1
-  ZABBIXBASEVERSION: 6.0
+  ZABBIXBASEVERSION: 6
   ZABBIXVERSION: 6.0.3
 
 jobs:     
@@ -616,7 +616,7 @@ jobs:
 
           EOF
           sudo /bin/cp openresty.spec rpm/rpmbuild/SPECS/
-          wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION/zabbix-$ZABBIXVERSION.tar.gz
+          wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
           sudo /bin/cp openresty-$OPENRESTYVERSION.tar.gz rpm/rpmbuild/SOURCES/
 
       - name: checkout_rpm
