@@ -494,8 +494,8 @@ jobs:
         # This password you will use when authorizing via SSH
         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
 
-  openeuler-build-openresty:
-    name: openeuler-build-openresty
+  openeuler-build-rpms:
+    name: openeuler-build-rpms
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -647,6 +647,8 @@ jobs:
         sudo /bin/cp zabbix/zabbix_server.conf rpm/rpmbuild/SOURCES
         sudo /bin/cp zabbix/sendmail.sh rpm/rpmbuild/SOURCES
         sudo /bin/cp zabbix/zabbix_server.service rpm/rpmbuild/SOURCES
+        sudo /bin/cp zabbix/zabbix_agent.service rpm/rpmbuild/SOURCES
+        sudo /bin/cp zabbix/zabbix_agent.conf rpm/rpmbuild/SOURCES
         sudo cat << EOF >zabbix-server.spec
         Name:          zabbix-server
         Version:        $ZABBIXVERSION
