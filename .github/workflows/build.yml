@@ -397,6 +397,46 @@ jobs:
 
 
         EOF
+        sudo cat << EOF >zabbix-php.spec
+        Name:		zabbix-php
+        Version:	$ZABBIXVERSION
+        Release:	1%{?dist}
+        Summary:	zabbix前端
+
+        Group:		nn
+        License:	GPL
+        URL:		https://gybyt.cn
+        Source0:	https://cdn.zabbix.com/zabbix/sources/stable/5.0/%{name}-%{version}.tar.gz
+        Source1:	html
+
+        Requires:	openresty php72 php72-php-cli php72-php-fpm php72-php-common php72-php-devel php72-php-embedded php72-php-gd php72-php-mbstring php72-php-mysqlnd php72-php-opcache php72-php-pdo php72-php-xml php72-php-bcmath  php72-php-pcre
+
+        %description
+
+        %install
+        %{__mkdir} -p %{buildroot}/home/wwwroot/default
+        cp -r  %{SOURCE1}/* %{buildroot}/home/wwwroot/default
+
+        %files
+        /home/wwwroot/default
+        %doc
+
+        %pre
+        if [ $1 == 1 ]; then
+          rm -rf /home/wwwroot/default
+        fi
+
+        %post
+        if [ $1 == 1 ]; then
+          sed -i "s/post_max_size = 8M/post_max_size = 16M/g" /etc/opt/remi/php72/php.ini
+          sed -i "s/max_execution_time = 30/max_execution_time = 300/g" /etc/opt/remi/php72/php.ini
+          sed -i "s/max_input_time = 60/max_input_time = 300/g" /etc/opt/remi/php72/php.ini
+          echo "date.timezone =Asia/Shanghai" >> /etc/opt/remi/php72/php.ini
+        fi
+
+        %changelog
+
+        EOF
         sudo /bin/cp zabbix-server.spec rpm/rpmbuild/SPECS/
         sudo /bin/cp zabbix-agent.spec rpm/rpmbuild/SPECS/
         wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
@@ -457,6 +497,7 @@ jobs:
       run: |
         git config --local user.email "nnweb365@gmail.com"
         git config --local user.name "codetiger666"
+        git pull
         git add ./
         git commit -m "update openresty"
         git pull
