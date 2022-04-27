@@ -1,5 +1,5 @@
 
-%_topdir %(echo $HOME)/rpmbuild
+%_topdir /opt/rpmbuild
 
 %_smp_mflags %( \
     [ -z "$RPM_BUILD_NCPUS" ] \\\
