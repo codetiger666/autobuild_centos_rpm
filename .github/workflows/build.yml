@@ -959,8 +959,7 @@ jobs:
 
         EOF
         sudo /bin/cp zabbix-agent.spec rpm/rpmbuild/SPECS/
-        sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
-        sudo tar -zcvf zabbix-agent-$ZABBIXVERSION.tar.gz zabbix-agent-$ZABBIXVERSION
+        sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tY
         sudo /bin/cp zabbix-server.spec rpm/rpmbuild/SPECS/
         wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
         sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
