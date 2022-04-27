@@ -40,6 +40,8 @@ jobs:
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
         docker cp zabbix/.rpmmacros $centos:/root/.rpmmacros
+        docker exec -i $centos rm -rf /etc/yum.repos.d/*
+        docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/centos/centos.repo
         docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
         docker exec -i $centos rpmdev-setuptree
         
@@ -389,6 +391,8 @@ jobs:
         echo "export openeuler=$openeuler" >> $HOME/.profile
         source $HOME/.profile
         docker cp zabbix/.rpmmacros $openeuler:/root/.rpmmacros
+        docker exec -i $openeuler rm -rf /etc/yum.repos.d/*
+        docker exec -i $openeuler wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/openeuler/openeuler.repo
         docker exec -i $openeuler yum install wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel -y
         docker exec -i $openeuler rpmdev-setuptree
 
