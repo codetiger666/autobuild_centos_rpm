@@ -39,12 +39,12 @@ jobs:
         centos=`docker run -itd -v $(pwd)/rpm:/opt centos:7`
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
-        docker cp openresty/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos yum install wget -y
         docker exec -i $centos rm -rf /etc/yum.repos.d/*
         docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/centos/centos.repo
         docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel -y
         docker exec -i $centos rpmdev-setuptree
+        docker cp openresty/.rpmmacros $centos:/root/.rpmmacros
         
     - name: clone modules
       run: |
@@ -313,6 +313,7 @@ jobs:
       run: |
         source $HOME/.profile
         docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/openresty.spec
+        docker cp zabbix/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
         
     - name: copy realease
@@ -391,12 +392,12 @@ jobs:
         openeuler=`docker run -itd -v $(pwd)/rpm:/opt openeuler/openeuler:22.03-lts`
         echo "export openeuler=$openeuler" >> $HOME/.profile
         source $HOME/.profile
-        docker cp zabbix/.rpmmacros $openeuler:/root/.rpmmacros
         docker exec -i $openeuler yum install wget -y
         docker exec -i $openeuler rm -rf /etc/yum.repos.d/*
         docker exec -i $openeuler wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/openeuler/openeuler.repo
         docker exec -i $openeuler yum install wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel -y
         docker exec -i $openeuler rpmdev-setuptree
+        docker cp openresty/.rpmmacros $openeuler:/root/.rpmmacros
 
     - name: clone modules
       run: |
@@ -665,6 +666,7 @@ jobs:
       run: |
         source $HOME/.profile
         docker exec -i $openeuler rpmbuild -ba /opt/rpmbuild/SPECS/openresty.spec
+        docker cp zabbix/.rpmmacros $openeuler:/root/.rpmmacros
         docker exec -i $openeuler rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
         
     - name: copy realease
