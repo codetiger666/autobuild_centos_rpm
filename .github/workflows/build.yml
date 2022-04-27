@@ -722,7 +722,7 @@ jobs:
     - name: run-centos
       run: |
         mkdir rpm
-        centos=`docker run -itd -v $(pwd)/rpm:/opt openeuler:22.03-lts`
+        centos=`docker run -itd -v $(pwd)/rpm:/opt openeuler/openeuler:22.03-lts`
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
         docker exec -i $centos yum install wget -y
