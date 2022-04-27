@@ -312,7 +312,7 @@ jobs:
     - name: run-build
       run: |
         source $HOME/.profile
-        docker exec -i $centos rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
+        docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/openresty.spec
         docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
         
     - name: copy realease
@@ -664,7 +664,7 @@ jobs:
     - name: run-build
       run: |
         source $HOME/.profile
-        docker exec -i $openeuler rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
+        docker exec -i $openeuler rpmbuild -ba /opt/rpmbuild/SPECS/openresty.spec
         docker exec -i $openeuler rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
         
     - name: copy realease
