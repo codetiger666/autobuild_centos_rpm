@@ -669,6 +669,8 @@ jobs:
         source $HOME/.profile
         docker exec -i $openeuler rpmbuild -ba /opt/rpmbuild/SPECS/openresty.spec
         docker cp zabbix/.rpmmacros $openeuler:/root/.rpmmacros
+        docker stop $openeuler
+        docker start $openeuler
         docker exec -i $openeuler rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
         
     - name: copy realease
