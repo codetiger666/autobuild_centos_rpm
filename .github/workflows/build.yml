@@ -8,6 +8,7 @@ on:
           default: 'false'
   schedule:
     - cron: 0 10 * * *
+  push:
 
 env:
   OPENRESTYVERSION: 1.19.9.1
