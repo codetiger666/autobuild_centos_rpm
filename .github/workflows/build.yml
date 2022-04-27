@@ -279,13 +279,132 @@ jobs:
         %changelog
 
         EOF
+        sudo cat << EOF >zabbix-agent.spec     
+        Name:		zabbix-agent
+        Version:	$ZABBIXVERSION
+        Release:	1%{?dist}
+        Summary:	自编译zabbix agent
+
+        Group:		nn
+        License:	GPL
+        URL:		https://gybyt.cn
+        Source0:	https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/%{name}-%{version}.tar.gz
+        Source1:	zabbix_agentd.conf
+        Source2:	sendmail.sh
+        Source3:	zabbix_agent.service
+
+        BuildRequires:	 net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
+        Requires:	net-snmp libssh2 OpenIPMI libevent openldap libcurl
+
+        %description
+        zabbix客户端后端自编译
+
+        %prep
+        %setup -q
+
+
+        %build
+        CFLAGS="-fPIC" ./configure --prefix=/usr/local/zabbix --enable-agent \
+        --with-net-snmp \
+        --with-libcurl \
+        --with-libxml2 \
+        --with-ssh2 \
+        --with-openipmi \
+        --with-openssl \
+        --with-libcurl \
+        --enable-ipv6
+        make %{?_smp_mflags}
+
+
+        %install
+        rm -rf $RPM_BUILD_ROOT
+        make install DESTDIR=%{buildroot}
+        %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_agentd.conf
+        %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{_usr}/lib/systemd/system/zabbix_agent.service
+
+        # 安装前准备
+        %pre
+        if [ $1 == 1 ]; then
+          %if 0%{?use_systemd}
+                        if [ -f /usr/lib/systemd/system/zabbix_agent.service ]
+                        %systemd_preun zabbix_agent.service
+                        fi
+                %endif
+                count=`ps -ef |grep zabbix_agentd |grep -v "grep" |wc -l`
+                if [ $count -gt 0 ]; then
+          ps -ef | grep zabbix | grep -v grep | cut -c 9-15 | xargs kill -s 9
+                fi
+          rm -rf /usr/local/zabbix
+          rm -rf /usr/lib/systemd/system/zabbix_agent.service
+                systemctl daemon-reload
+        fi
+
+        # 安装后操作
+        %post
+        if [ $1 == 1 ]; then
+        egrep zabbix /etc/group >& /dev/null
+                if [ $? -ne 0 ]
+                then
+                groupadd zabbix
+                fi
+                id zabbix &> /dev/null
+                if [ $? -ne 0 ]
+                then
+                /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
+                fi
+          chown -R zabbix:zabbix /usr/local/zabbix
+          ln -s /usr/local/zabbix/sbin/zabbix_agentd /usr/local/sbin/zabbix_agentd
+          sed -i "s/Hostname=local/Hostname=$HOSTNAME/g" /usr/local/zabbix/etc/zabbix_agentd.conf
+        fi
+
+        # 卸载前准备
+        %preun
+        if [ $1 == 0 ]; then
+                %if 0%{?use_systemd}
+                        if [ -f /usr/lib/systemd/system/zabbix_agent.service ]
+                        %systemd_preun zabbix_agent.service
+                        fi
+                %endif
+                count=`ps -ef |grep zabbix_agentd |grep -v "grep" |wc -l`
+                if [ $count -gt 0 ]; then
+                ps -ef | grep zabbix | grep -v grep | cut -c 9-15 | xargs kill -s 9
+                fi
+        fi
+
+        # 卸载后步骤
+        %postun
+        if [ $1 == 0 ]; then
+                systemctl disable zabbix_agent
+          rm -rf /usr/lib/systemd/system/zabbix_agent.service
+          rm -rf /usr/local/sbin/zabbix_agentd
+                userdel zabbix
+                systemctl daemon-reload
+        fi
+
+
+        %files
+        %defattr(-,root,root,0755)
+        %{_usr}/local/zabbix
+        %{_usr}/lib/systemd/system/zabbix_agent.service
+        %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_agentd.conf
+        %doc
+
+
+
+        %changelog
+
+
+        EOF
         sudo /bin/cp zabbix-server.spec rpm/rpmbuild/SPECS/
+        sudo /bin/cp zabbix-agent.spec rpm/rpmbuild/SPECS/
         wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
         sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
         cd rpm/rpmbuild/SOURCES/
         sudo tar xf zabbix-$ZABBIXVERSION.tar.gz
-        sudo mv zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
+        sudo cp zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
+        sudo cp zabbix-$ZABBIXVERSION zabbix-agent-$ZABBIXVERSION
         sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
+        sudo tar -zcvf zabbix-agent-$ZABBIXVERSION.tar.gz zabbix-agent-$ZABBIXVERSION
 
     - name: checkout_rpm
       run: |
@@ -315,11 +434,17 @@ jobs:
         source $HOME/.profile
         docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/openresty.spec
         docker cp zabbix/.rpmmacros $centos:/root/.rpmmacros
+        docker stop $centos
+        docker start $centos
         docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
+        docker stop $centos
+        docker start $centos
+        docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-agent.spec
         
     - name: copy realease
       run: |
         sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/zabbix-server-$ZABBIXVERSION-1.el7.x86_64.rpm centos_rpms/centos/7/x86_64/zabbix-server-$ZABBIXVERSION.el7.x86_64.rpm
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/zabbix-agent-$ZABBIXVERSION-1.el7.x86_64.rpm centos_rpms/centos/7/x86_64/zabbix-agent-$ZABBIXVERSION.el7.x86_64.rpm
         sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openresty-$OPENRESTYVERSION-1.el7.x86_64.rpm centos_rpms/centos/7/x86_64/
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms centos:7`
         docker exec -i $rpms yum install createrepo -y
