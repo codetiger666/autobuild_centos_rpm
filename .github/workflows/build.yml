@@ -494,7 +494,7 @@ jobs:
           docker cp zabbix/.rpmmacros $centos:/root/.rpmmacros
           docker exec -i $centos rm -rf /etc/yum.repos.d/*
           docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/centos/centos.repo
-          docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel MariaDB-client MariaDB-common mariadb-libs MariaDB-devel MariaDB-compat net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel -y
+          docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel mysql-community-libs-compat net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel -y
           docker exec -i $centos rpmdev-setuptree
           
           
@@ -517,8 +517,8 @@ jobs:
           Source2:	sendmail.sh
           Source3:	zabbix_server.service
 
-          BuildRequires:	MariaDB-client MariaDB-common mariadb-libs MariaDB-devel MariaDB-compat net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
-          Requires:	net-snmp MariaDB-client MariaDB-common mariadb-libs MariaDB-devel MariaDB-compat libssh2 OpenIPMI libevent openldap libcurl
+          BuildRequires:	mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel mysql-community-libs-compat net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
+          Requires:	net-snmp mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel mysql-community-libs-compat libssh2 OpenIPMI libevent openldap libcurl
 
           %description
           zabbix服务端后端自编译
