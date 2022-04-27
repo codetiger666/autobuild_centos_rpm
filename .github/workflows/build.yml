@@ -616,7 +616,7 @@ jobs:
           EOF
           wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
           sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
-          sudo cd rpm/rpmbuild/SOURCES/
+          cd rpm/rpmbuild/SOURCES/
           sudo tar xf zabbix-$ZABBIXVERSION.tar.gz
           sudo mv zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
           sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
