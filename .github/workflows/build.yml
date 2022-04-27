@@ -8,7 +8,6 @@ on:
           default: 'false'
   schedule:
     - cron: 0 10 * * *
-  push:
 
 env:
   OPENRESTYVERSION: 1.19.9.1
@@ -702,237 +701,237 @@ jobs:
           # This password you will use when authorizing via SSH
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
 
-  openeuler-build-zabbix-server:
-      name: openeuler-build-zabbix-server
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v2
+  # openeuler-build-zabbix-server:
+  #     name: openeuler-build-zabbix-server
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Initialization environment
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo rm -rf /etc/localtime
-          sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-          # sudo apt remove php* dotnet* google* 
-          sudo rm -rf \
-            /usr/share/dotnet \
-            /etc/mysql \
-            /etc/php
+  #     - name: Initialization environment
+  #       env:
+  #         DEBIAN_FRONTEND: noninteractive
+  #       run: |
+  #         sudo rm -rf /etc/localtime
+  #         sudo ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+  #         # sudo apt remove php* dotnet* google* 
+  #         sudo rm -rf \
+  #           /usr/share/dotnet \
+  #           /etc/mysql \
+  #           /etc/php
   
-      - name: run-centos
-        run: |
-          mkdir rpm
-          centos=`docker run -itd -v $(pwd)/rpm:/opt openeuler:22.03-lts`
-          echo "export centos=$centos" >> $HOME/.profile
-          source $HOME/.profile
-          docker exec -i $centos yum install wget -y
-          docker cp zabbix/.rpmmacros $centos:/root/.rpmmacros
-          docker exec -i $centos rm -rf /etc/yum.repos.d/*
-          docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/openeuler/openeuler.repo
-          docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel -y
-          docker exec -i $centos rpmdev-setuptree
+  #     - name: run-centos
+  #       run: |
+  #         mkdir rpm
+  #         centos=`docker run -itd -v $(pwd)/rpm:/opt openeuler:22.03-lts`
+  #         echo "export centos=$centos" >> $HOME/.profile
+  #         source $HOME/.profile
+  #         docker exec -i $centos yum install wget -y
+  #         docker cp zabbix/.rpmmacros $centos:/root/.rpmmacros
+  #         docker exec -i $centos rm -rf /etc/yum.repos.d/*
+  #         docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/openeuler/openeuler.repo
+  #         docker exec -i $centos yum install epel-release wget curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel -y
+  #         docker exec -i $centos rpmdev-setuptree
           
           
-      - name: init-build
-        run: |
-          sudo /bin/cp zabbix/zabbix_server.conf rpm/rpmbuild/SOURCES
-          sudo /bin/cp zabbix/sendmail.sh rpm/rpmbuild/SOURCES
-          sudo /bin/cp zabbix/zabbix_server.service rpm/rpmbuild/SOURCES
-          sudo cat << EOF >zabbix-server.spec
-          Name:          zabbix-server
-          Version:        $ZABBIXVERSION
-          Release:        1%{?dist}
-          Summary:        自编译zabbix server
+  #     - name: init-build
+  #       run: |
+  #         sudo /bin/cp zabbix/zabbix_server.conf rpm/rpmbuild/SOURCES
+  #         sudo /bin/cp zabbix/sendmail.sh rpm/rpmbuild/SOURCES
+  #         sudo /bin/cp zabbix/zabbix_server.service rpm/rpmbuild/SOURCES
+  #         sudo cat << EOF >zabbix-server.spec
+  #         Name:          zabbix-server
+  #         Version:        $ZABBIXVERSION
+  #         Release:        1%{?dist}
+  #         Summary:        自编译zabbix server
 
-          Group:		nn
-          License:	GPL
-          URL:		https://gybyt.cn
-          Source0:	https://cdn.zabbix.com/zabbix/sources/stable/6.0/%{name}-%{version}.tar.gz
-          Source1:	zabbix_server.conf
-          Source2:	sendmail.sh
-          Source3:	zabbix_server.service
+  #         Group:		nn
+  #         License:	GPL
+  #         URL:		https://gybyt.cn
+  #         Source0:	https://cdn.zabbix.com/zabbix/sources/stable/6.0/%{name}-%{version}.tar.gz
+  #         Source1:	zabbix_server.conf
+  #         Source2:	sendmail.sh
+  #         Source3:	zabbix_server.service
 
-          BuildRequires:	mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
-          Requires:	net-snmp mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel libssh2 OpenIPMI libevent openldap libcurl
+  #         BuildRequires:	mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel
+  #         Requires:	net-snmp mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel libssh2 OpenIPMI libevent openldap libcurl
 
-          %description
-          zabbix服务端后端自编译
+  #         %description
+  #         zabbix服务端后端自编译
 
-          %prep
-          %setup -q
-
-
-          %build
-          CFLAGS="-fPIC" ./configure --prefix=/usr/local/zabbix --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2 --enable-ipv6 --with-openipmi --with-ldap --with-ssh2 --enable-proxy
-          make %{?_smp_mflags}
+  #         %prep
+  #         %setup -q
 
 
-          %install
-          rm -rf $RPM_BUILD_ROOT
-          make install DESTDIR=%{buildroot}
-          %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_server.conf
-          %{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}%{_usr}/local/zabbix/share/zabbix/alertscripts/sendmail.sh
-          %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{_usr}/lib/systemd/system/zabbix_server.service
-          %{__mkdir} -p %{buildroot}%{_usr}/local/zabbix/source
-          cp -r %{_builddir}/%{name}-%{version}/database %{buildroot}%{_usr}/local/zabbix/source
-
-          # 安装前准备
-          %pre
-          if [ $1 == 1 ]; then
-            %if 0%{?use_systemd}
-                          if [ -f /usr/lib/systemd/system/zabbix_server.service ]
-                          %systemd_preun zabbix_server.service
-                          fi
-                  %endif
-                  count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-                  if [ $count -gt 0 ]; then
-                  pkill zabbix_server
-                  fi
-            rm -rf /usr/local/zabbix
-            rm -rf /usr/lib/systemd/system/zabbix_server.service
-                  systemctl daemon-reload
-          fi
-
-          # 安装后操作
-          %post
-          if [ $1 == 1 ]; then
-          egrep zabbix /etc/group >& /dev/null
-                  if [ $? -ne 0 ]
-                  then
-                  groupadd zabbix
-                  fi
-                  id zabbix &> /dev/null
-                  if [ $? -ne 0 ]
-                  then
-                  /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
-                  fi
-            chown -R zabbix:zabbix /usr/local/zabbix
-            ln -s /usr/local/zabbix/sbin/zabbix_server /usr/local/sbin/
-          fi
-
-          # 卸载前准备
-          %preun
-          if [ $1 == 0 ]; then
-                  %if 0%{?use_systemd}
-                          if [ -f /usr/lib/systemd/system/zabbix_server.service ]
-                          %systemd_preun zabbix_server.service
-                          fi
-                  %endif
-                  count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-                  if [ $count -gt 0 ]; then
-                  pkill zabbix_server
-                  fi
-          fi
-
-          # 卸载后步骤
-          %postun
-          if [ $1 == 0 ]; then
-                  systemctl disable zabbix_server
-            rm -rf /usr/lib/systemd/system/zabbix_server.service
-            rm -rf /usr/local/sbin/zabbix_server
-                  userdel zabbix
-                  systemctl daemon-reload
-          fi
+  #         %build
+  #         CFLAGS="-fPIC" ./configure --prefix=/usr/local/zabbix --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2 --enable-ipv6 --with-openipmi --with-ldap --with-ssh2 --enable-proxy
+  #         make %{?_smp_mflags}
 
 
-          %files
-          %defattr(-,root,root,0755)
-          %{_usr}/local/zabbix
-          %{_usr}/lib/systemd/system/zabbix_server.service
-          %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_server.conf
-          %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_agentd.conf
-          %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_proxy.conf
-          %doc
+  #         %install
+  #         rm -rf $RPM_BUILD_ROOT
+  #         make install DESTDIR=%{buildroot}
+  #         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_server.conf
+  #         %{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}%{_usr}/local/zabbix/share/zabbix/alertscripts/sendmail.sh
+  #         %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{_usr}/lib/systemd/system/zabbix_server.service
+  #         %{__mkdir} -p %{buildroot}%{_usr}/local/zabbix/source
+  #         cp -r %{_builddir}/%{name}-%{version}/database %{buildroot}%{_usr}/local/zabbix/source
+
+  #         # 安装前准备
+  #         %pre
+  #         if [ $1 == 1 ]; then
+  #           %if 0%{?use_systemd}
+  #                         if [ -f /usr/lib/systemd/system/zabbix_server.service ]
+  #                         %systemd_preun zabbix_server.service
+  #                         fi
+  #                 %endif
+  #                 count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
+  #                 if [ $count -gt 0 ]; then
+  #                 pkill zabbix_server
+  #                 fi
+  #           rm -rf /usr/local/zabbix
+  #           rm -rf /usr/lib/systemd/system/zabbix_server.service
+  #                 systemctl daemon-reload
+  #         fi
+
+  #         # 安装后操作
+  #         %post
+  #         if [ $1 == 1 ]; then
+  #         egrep zabbix /etc/group >& /dev/null
+  #                 if [ $? -ne 0 ]
+  #                 then
+  #                 groupadd zabbix
+  #                 fi
+  #                 id zabbix &> /dev/null
+  #                 if [ $? -ne 0 ]
+  #                 then
+  #                 /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
+  #                 fi
+  #           chown -R zabbix:zabbix /usr/local/zabbix
+  #           ln -s /usr/local/zabbix/sbin/zabbix_server /usr/local/sbin/
+  #         fi
+
+  #         # 卸载前准备
+  #         %preun
+  #         if [ $1 == 0 ]; then
+  #                 %if 0%{?use_systemd}
+  #                         if [ -f /usr/lib/systemd/system/zabbix_server.service ]
+  #                         %systemd_preun zabbix_server.service
+  #                         fi
+  #                 %endif
+  #                 count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
+  #                 if [ $count -gt 0 ]; then
+  #                 pkill zabbix_server
+  #                 fi
+  #         fi
+
+  #         # 卸载后步骤
+  #         %postun
+  #         if [ $1 == 0 ]; then
+  #                 systemctl disable zabbix_server
+  #           rm -rf /usr/lib/systemd/system/zabbix_server.service
+  #           rm -rf /usr/local/sbin/zabbix_server
+  #                 userdel zabbix
+  #                 systemctl daemon-reload
+  #         fi
+
+
+  #         %files
+  #         %defattr(-,root,root,0755)
+  #         %{_usr}/local/zabbix
+  #         %{_usr}/lib/systemd/system/zabbix_server.service
+  #         %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_server.conf
+  #         %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_agentd.conf
+  #         %config(noreplace) %{_usr}/local/zabbix/etc/zabbix_proxy.conf
+  #         %doc
 
 
 
-          %changelog
+  #         %changelog
 
-          EOF
-          sudo /bin/cp zabbix-server.spec rpm/rpmbuild/SPECS/
-          wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
-          sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
-          cd rpm/rpmbuild/SOURCES/
-          sudo tar xf zabbix-$ZABBIXVERSION.tar.gz
-          sudo mv zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
-          sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
+  #         EOF
+  #         sudo /bin/cp zabbix-server.spec rpm/rpmbuild/SPECS/
+  #         wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
+  #         sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
+  #         cd rpm/rpmbuild/SOURCES/
+  #         sudo tar xf zabbix-$ZABBIXVERSION.tar.gz
+  #         sudo mv zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
+  #         sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
 
-      - name: checkout_rpm
-        run: |
-          git clone https://github.com/codetiger666/centos_rpms.git
-          mkdir centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/ -p 2>/dev/null
+  #     - name: checkout_rpm
+  #       run: |
+  #         git clone https://github.com/codetiger666/centos_rpms.git
+  #         mkdir centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/ -p 2>/dev/null
 
 
-      - name: Start SSH via ngrok
-        uses: P3TERX/ssh2actions@main
-        with:
-          mode: ngrok
-        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-        env:
-          # After sign up on the https://ngrok.com
-          # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
-          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+  #     - name: Start SSH via ngrok
+  #       uses: P3TERX/ssh2actions@main
+  #       with:
+  #         mode: ngrok
+  #       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+  #       env:
+  #         # After sign up on the https://ngrok.com
+  #         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
+  #         NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
           
-          # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
-          # You can find this server region here: https://ngrok.com/docs#global-locations
-          NGROK_REGION: jp
+  #         # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
+  #         # You can find this server region here: https://ngrok.com/docs#global-locations
+  #         NGROK_REGION: jp
 
-          # This password you will use when authorizing via SSH
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+  #         # This password you will use when authorizing via SSH
+  #         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
 
-      - name: run-build
-        run: |
-          source $HOME/.profile
-          docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
+  #     - name: run-build
+  #       run: |
+  #         source $HOME/.profile
+  #         docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
           
-      - name: copy realease
-        run: |
-          sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/zabbix-server-$ZABBIXVERSION-1.x86_64.rpm centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/zabbix-server-$ZABBIXVERSION.x86_64.rpm
-          rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms openeuler/openeuler:22.03-lts`
-        docker exec -i $rpms yum install createrepo -y
-        docker exec -i $rpms createrepo /centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/ 
+  #     - name: copy realease
+  #       run: |
+  #         sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/zabbix-server-$ZABBIXVERSION-1.x86_64.rpm centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/zabbix-server-$ZABBIXVERSION.x86_64.rpm
+  #         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms openeuler/openeuler:22.03-lts`
+  #       docker exec -i $rpms yum install createrepo -y
+  #       docker exec -i $rpms createrepo /centos_rpms/openeuler/openEuler-22.03-LTS/x86_64/ 
 
-      - name: git add
-        working-directory: ./centos_rpms
-        run: |
-          git config --local user.email "nnweb365@gmail.com"
-          git config --local user.name "codetiger666"
-          git pull
-          git add ./
-          git commit -m "update openresty"
+  #     - name: git add
+  #       working-directory: ./centos_rpms
+  #       run: |
+  #         git config --local user.email "nnweb365@gmail.com"
+  #         git config --local user.name "codetiger666"
+  #         git pull
+  #         git add ./
+  #         git commit -m "update openresty"
 
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     directory: ./centos_rpms
-      #     repository: codetiger666/centos_rpms
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: main
-      - name: Pushes to another repository
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.GITHUBTOKEN }}
-        with:
-          source-directory: 'centos_rpms'
-          destination-github-username: 'codetiger666'
-          destination-repository-name: 'centos_rpms'
-          user-email: nnweb365@gmail.com
-          target-branch: main
+  #     # - name: Push changes
+  #     #   uses: ad-m/github-push-action@master
+  #     #   with:
+  #     #     directory: ./centos_rpms
+  #     #     repository: codetiger666/centos_rpms
+  #     #     github_token: ${{ secrets.GITHUB_TOKEN }}
+  #     #     branch: main
+  #     - name: Pushes to another repository
+  #       uses: cpina/github-action-push-to-another-repository@main
+  #       env:
+  #         API_TOKEN_GITHUB: ${{ secrets.GITHUBTOKEN }}
+  #       with:
+  #         source-directory: 'centos_rpms'
+  #         destination-github-username: 'codetiger666'
+  #         destination-repository-name: 'centos_rpms'
+  #         user-email: nnweb365@gmail.com
+  #         target-branch: main
 
-      - name: Start SSH via ngrok2
-        uses: P3TERX/ssh2actions@main
-        with:
-          mode: ngrok
-        if: failure()
-        env:
-          # After sign up on the https://ngrok.com
-          # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
-          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+  #     - name: Start SSH via ngrok2
+  #       uses: P3TERX/ssh2actions@main
+  #       with:
+  #         mode: ngrok
+  #       if: failure()
+  #       env:
+  #         # After sign up on the https://ngrok.com
+  #         # You can find this token here: https://dashboard.ngrok.com/auth/your-authtoken
+  #         NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
           
-          # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
-          # You can find this server region here: https://ngrok.com/docs#global-locations
-          NGROK_REGION: jp
+  #         # ngrok server region [us, eu, au, ap, sa, jp, in] (optional, default: us)
+  #         # You can find this server region here: https://ngrok.com/docs#global-locations
+  #         NGROK_REGION: jp
 
-          # This password you will use when authorizing via SSH
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+  #         # This password you will use when authorizing via SSH
+  #         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
