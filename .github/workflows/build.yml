@@ -58,6 +58,8 @@ jobs:
         sudo /bin/cp openresty/nginx.service rpm/rpmbuild/SOURCES
         sudo /bin/cp openresty/default.conf rpm/rpmbuild/SOURCES
         sudo /bin/cp openresty/nginx.conf rpm/rpmbuild/SOURCES
+        sudo /bin/cp zabbix/zabbix_agent.service rpm/rpmbuild/SOURCES
+        sudo /bin/cp zabbix/zabbix_agentd.conf rpm/rpmbuild/SOURCES
         cat << EOF >openresty.spec
         %define prefix /usr/local/nginx
         Name:          openresty
@@ -647,8 +649,6 @@ jobs:
         sudo /bin/cp zabbix/zabbix_server.conf rpm/rpmbuild/SOURCES
         sudo /bin/cp zabbix/sendmail.sh rpm/rpmbuild/SOURCES
         sudo /bin/cp zabbix/zabbix_server.service rpm/rpmbuild/SOURCES
-        sudo /bin/cp zabbix/zabbix_agentd.service rpm/rpmbuild/SOURCES
-        sudo /bin/cp zabbix/zabbix_agentd.conf rpm/rpmbuild/SOURCES
         sudo cat << EOF >zabbix-server.spec
         Name:          zabbix-server
         Version:        $ZABBIXVERSION
