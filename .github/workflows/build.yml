@@ -401,8 +401,8 @@ jobs:
         sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
         cd rpm/rpmbuild/SOURCES/
         sudo tar xf zabbix-$ZABBIXVERSION.tar.gz
-        sudo cp zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
-        sudo cp zabbix-$ZABBIXVERSION zabbix-agent-$ZABBIXVERSION
+        sudo cp -r zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
+        sudo cp -r zabbix-$ZABBIXVERSION zabbix-agent-$ZABBIXVERSION
         sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
         sudo tar -zcvf zabbix-agent-$ZABBIXVERSION.tar.gz zabbix-agent-$ZABBIXVERSION
 
