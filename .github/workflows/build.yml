@@ -502,9 +502,7 @@ jobs:
           sudo /bin/cp zabbix/zabbix_server.conf rpm/rpmbuild/SOURCES
           sudo /bin/cp zabbix/sendmail.sh rpm/rpmbuild/SOURCES
           sudo /bin/cp zabbix/zabbix_server.service rpm/rpmbuild/SOURCES
-          sudo /bin/cp openresty/.rpmmacros rpm
-          cat << EOF >openresty.spec
-          %define prefix /usr/local/nginx
+          cat << EOF >zabbix-server.spec
           Name:          zabbix-server
           Version:        $ZABBIXVERSION
           Release:        1%{?dist}
@@ -615,13 +613,12 @@ jobs:
           %changelog
 
           EOF
-          sudo /bin/cp openresty.spec rpm/rpmbuild/SPECS/
           wget https://cdn.zabbix.com/zabbix/sources/stable/$ZABBIXBASEVERSION.0/zabbix-$ZABBIXVERSION.tar.gz
           sudo /bin/cp zabbix-$ZABBIXVERSION.tar.gz rpm/rpmbuild/SOURCES/
-          cd rpm/rpmbuild/SOURCES/
-          tar xf zabbix-$ZABBIXVERSION.tar.gz
-          mv zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
-          tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
+          sudo cd rpm/rpmbuild/SOURCES/
+          sudo tar xf zabbix-$ZABBIXVERSION.tar.gz
+          sudo mv zabbix-$ZABBIXVERSION zabbix-server-$ZABBIXVERSION
+          sudo tar -zcvf zabbix-server-$ZABBIXVERSION.tar.gz zabbix-server-$ZABBIXVERSION
 
       - name: checkout_rpm
         run: |
@@ -649,7 +646,7 @@ jobs:
       - name: run-build
         run: |
           source $HOME/.profile
-          docker exec -i $centos rpmbuild -ba /root/rpmbuild/SPECS/openresty.spec
+          docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/zabbix-server.spec
           
       - name: copy realease
         run: |
