@@ -503,7 +503,7 @@ jobs:
           sudo /bin/cp zabbix/zabbix_server.conf rpm/rpmbuild/SOURCES
           sudo /bin/cp zabbix/sendmail.sh rpm/rpmbuild/SOURCES
           sudo /bin/cp zabbix/zabbix_server.service rpm/rpmbuild/SOURCES
-          cat << EOF >zabbix-server.spec
+          cat << EOF >rpm/rpmbuild/SPECS/zabbix-server.spec
           Name:          zabbix-server
           Version:        $ZABBIXVERSION
           Release:        1%{?dist}
