@@ -41,7 +41,7 @@ jobs:
         source $HOME/.profile
         docker exec -i $centos yum install wget -y
         docker exec -i $centos rm -rf /etc/yum.repos.d/*
-        docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/centos/ext-centos.repo
+        docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/centos/centos.repo
         docker exec -i $centos yum install epel-release wget autoconf  curl rpm-build luajit rpmdevtools pcre-devel make openssl-devel gcc gd libxslt-devel libxml2-devel geoip-devel libatomic_ops-devel perl-ExtUtils-Embed gd-devel  net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel openldap-devel libcurl-devel mysql-community-client mysql-community-common mysql-community-libs mysql-community-devel mysql-community-libs-compat -y
         docker cp openresty/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos rpmdev-setuptree
