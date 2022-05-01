@@ -92,7 +92,7 @@ jobs:
 
         # 安装
         %install
-        rm -rf $RPM_BUILD_ROOT
+        rm -rf \$RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{prefix}/nginx.conf
         %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{prefix}/conf.d/default.conf
@@ -126,7 +126,7 @@ jobs:
                 fi
             %endif
             count=`ps -ef |grep nginx |grep -v "grep" |wc -l`
-            if [ $count -gt 0 ]; then
+            if [ \$count -gt 0 ]; then
             nginx -s stop
             fi
         fi
@@ -141,7 +141,6 @@ jobs:
             rm -rf /var/tmp/nginx
             rm -rf /var/log/nginx
             rm -rf /usr/local/lib64/perl5/auto/nginx
-            rm -rf /usr/local/nginx
             userdel nginx
             systemctl daemon-reload
         fi
@@ -200,7 +199,7 @@ jobs:
 
 
         %install
-        rm -rf $RPM_BUILD_ROOT
+        rm -rf \$RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_server.conf
         %{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}%{_usr}/local/zabbix/share/zabbix/alertscripts/sendmail.sh
@@ -210,41 +209,41 @@ jobs:
 
         # 安装前准备
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           %if 0%{?use_systemd}
-                        if [ -f /usr/lib/systemd/system/zabbix_server.service ]
-                        %systemd_preun zabbix_server.service
-                        fi
-                %endif
-                count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
-                pkill zabbix_server
-                fi
+            if [ -f /usr/lib/systemd/system/zabbix_server.service ]
+            %systemd_preun zabbix_server.service
+            fi
+          %endif
+          count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
+          if [ $count -gt 0 ]; then
+          pkill zabbix_server
+          fi
           rm -rf /usr/local/zabbix
           rm -rf /usr/lib/systemd/system/zabbix_server.service
-                systemctl daemon-reload
+          systemctl daemon-reload
         fi
 
         # 安装后操作
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
-                if [ $? -ne 0 ]
-                then
-                groupadd zabbix
-                fi
-                id zabbix &> /dev/null
-                if [ $? -ne 0 ]
-                then
-                /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
-                fi
-          chown -R zabbix:zabbix /usr/local/zabbix
-          ln -s /usr/local/zabbix/sbin/zabbix_server /usr/local/sbin/
+            if [ $? -ne 0 ]
+            then
+            groupadd zabbix
+            fi
+            id zabbix &> /dev/null
+            if [ \$? -ne 0 ]
+            then
+            /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
+            fi
+        chown -R zabbix:zabbix /usr/local/zabbix
+        ln -s /usr/local/zabbix/sbin/zabbix_server /usr/local/sbin/
         fi
 
         # 卸载前准备
         %preun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_server.service ]
                         %systemd_preun zabbix_server.service
@@ -258,12 +257,12 @@ jobs:
 
         # 卸载后步骤
         %postun
-        if [ $1 == 0 ]; then
-                systemctl disable zabbix_server
-          rm -rf /usr/lib/systemd/system/zabbix_server.service
-          rm -rf /usr/local/sbin/zabbix_server
-                userdel zabbix
-                systemctl daemon-reload
+        if [ \$1 == 0 ]; then
+            systemctl disable zabbix_server
+            rm -rf /usr/lib/systemd/system/zabbix_server.service
+            rm -rf /usr/local/sbin/zabbix_server
+            userdel zabbix
+            systemctl daemon-reload
         fi
 
 
@@ -326,14 +325,14 @@ jobs:
 
         # 安装前准备
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_agent.service ]
                         %systemd_preun zabbix_agent.service
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_agentd |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
           ps -ef | grep zabbix | grep -v grep | cut -c 9-15 | xargs kill -s 9
                 fi
           rm -rf /usr/local/zabbix
@@ -361,14 +360,14 @@ jobs:
 
         # 卸载前准备
         %preun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_agent.service ]
                         %systemd_preun zabbix_agent.service
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_agentd |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
                 ps -ef | grep zabbix | grep -v grep | cut -c 9-15 | xargs kill -s 9
                 fi
         fi
@@ -377,8 +376,8 @@ jobs:
         %postun
         if [ $1 == 0 ]; then
                 systemctl disable zabbix_agent
-          rm -rf /usr/lib/systemd/system/zabbix_agent.service
-          rm -rf /usr/local/sbin/zabbix_agentd
+                rm -rf /usr/lib/systemd/system/zabbix_agent.service
+                rm -rf /usr/local/sbin/zabbix_agentd
                 userdel zabbix
                 systemctl daemon-reload
         fi
@@ -422,12 +421,12 @@ jobs:
         %doc
 
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           rm -rf /home/wwwroot/default
         fi
 
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           sed -i "s/post_max_size = 8M/post_max_size = 16M/g" /etc/opt/remi/php72/php.ini
           sed -i "s/max_execution_time = 30/max_execution_time = 300/g" /etc/opt/remi/php72/php.ini
           sed -i "s/max_input_time = 60/max_input_time = 300/g" /etc/opt/remi/php72/php.ini
@@ -614,7 +613,7 @@ jobs:
 
         # 安装
         %install
-        rm -rf $RPM_BUILD_ROOT
+        rm -rf \$RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{prefix}/nginx.conf
         %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{prefix}/conf.d/default.conf
@@ -648,7 +647,7 @@ jobs:
                 fi
             %endif
             count=`ps -ef |grep nginx |grep -v "grep" |wc -l`
-            if [ $count -gt 0 ]; then
+            if [ \$count -gt 0 ]; then
             nginx -s stop
             fi
         fi
@@ -663,7 +662,6 @@ jobs:
             rm -rf /var/tmp/nginx
             rm -rf /var/log/nginx
             rm -rf /usr/local/lib64/perl5/auto/nginx
-            rm -rf /usr/local/nginx
             userdel nginx
             systemctl daemon-reload
         fi
@@ -721,7 +719,7 @@ jobs:
 
 
         %install
-        rm -rf $RPM_BUILD_ROOT
+        rm -rf \$RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_server.conf
         %{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}%{_usr}/local/zabbix/share/zabbix/alertscripts/sendmail.sh
@@ -731,14 +729,14 @@ jobs:
 
         # 安装前准备
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_server.service ]
                         %systemd_preun zabbix_server.service
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
                 pkill zabbix_server
                 fi
           rm -rf /usr/local/zabbix
@@ -748,14 +746,14 @@ jobs:
 
         # 安装后操作
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
                 if [ $? -ne 0 ]
                 then
                 groupadd zabbix
                 fi
                 id zabbix &> /dev/null
-                if [ $? -ne 0 ]
+                if [ \$? -ne 0 ]
                 then
                 /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
                 fi
@@ -765,21 +763,21 @@ jobs:
 
         # 卸载前准备
         %preun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_server.service ]
                         %systemd_preun zabbix_server.service
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
                 pkill zabbix_server
                 fi
         fi
 
         # 卸载后步骤
         %postun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 systemctl disable zabbix_server
           rm -rf /usr/lib/systemd/system/zabbix_server.service
           rm -rf /usr/local/sbin/zabbix_server
@@ -840,21 +838,21 @@ jobs:
 
 
         %install
-        rm -rf $RPM_BUILD_ROOT
+        rm -rf \$RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_agentd.conf
         %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{_usr}/lib/systemd/system/zabbix_agent.service
 
         # 安装前准备
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_agent.service ]
                         %systemd_preun zabbix_agent.service
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_agentd |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
           ps -ef | grep zabbix | grep -v grep | cut -c 9-15 | xargs kill -s 9
                 fi
           rm -rf /usr/local/zabbix
@@ -864,14 +862,14 @@ jobs:
 
         # 安装后操作
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
                 if [ $? -ne 0 ]
                 then
                 groupadd zabbix
                 fi
                 id zabbix &> /dev/null
-                if [ $? -ne 0 ]
+                if [ \$? -ne 0 ]
                 then
                 /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
                 fi
@@ -882,21 +880,21 @@ jobs:
 
         # 卸载前准备
         %preun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 %if 0%{?use_systemd}
                         if [ -f /usr/lib/systemd/system/zabbix_agent.service ]
                         %systemd_preun zabbix_agent.service
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_agentd |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
                 ps -ef | grep zabbix | grep -v grep | cut -c 9-15 | xargs kill -s 9
                 fi
         fi
 
         # 卸载后步骤
         %postun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 systemctl disable zabbix_agent
           rm -rf /usr/lib/systemd/system/zabbix_agent.service
           rm -rf /usr/local/sbin/zabbix_agentd
@@ -943,12 +941,12 @@ jobs:
         %doc
 
         %pre
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           rm -rf /home/wwwroot/default
         fi
 
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
           sed -i "s/post_max_size = 8M/post_max_size = 16M/g" /etc/opt/remi/php72/php.ini
           sed -i "s/max_execution_time = 30/max_execution_time = 300/g" /etc/opt/remi/php72/php.ini
           sed -i "s/max_input_time = 60/max_input_time = 300/g" /etc/opt/remi/php72/php.ini
