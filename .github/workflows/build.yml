@@ -216,7 +216,7 @@ jobs:
             fi
           %endif
           count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-          if [ $count -gt 0 ]; then
+          if [ \$count -gt 0 ]; then
           pkill zabbix_server
           fi
           rm -rf /usr/local/zabbix
@@ -228,7 +228,7 @@ jobs:
         %post
         if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
-            if [ $? -ne 0 ]
+            if [ \$? -ne 0 ]
             then
             groupadd zabbix
             fi
@@ -250,7 +250,7 @@ jobs:
                         fi
                 %endif
                 count=`ps -ef |grep zabbix_server |grep -v "grep" |wc -l`
-                if [ $count -gt 0 ]; then
+                if [ \$count -gt 0 ]; then
                 pkill zabbix_server
                 fi
         fi
@@ -318,7 +318,7 @@ jobs:
 
 
         %install
-        rm -rf $RPM_BUILD_ROOT
+        rm -rf \$RPM_BUILD_ROOT
         make install DESTDIR=%{buildroot}
         %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/zabbix/etc/zabbix_agentd.conf
         %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{_usr}/lib/systemd/system/zabbix_agent.service
@@ -342,14 +342,14 @@ jobs:
 
         # 安装后操作
         %post
-        if [ $1 == 1 ]; then
+        if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
-                if [ $? -ne 0 ]
+                if [ \$? -ne 0 ]
                 then
                 groupadd zabbix
                 fi
                 id zabbix &> /dev/null
-                if [ $? -ne 0 ]
+                if [ \$? -ne 0 ]
                 then
                 /usr/sbin/useradd -r zabbix -g zabbix  -s /sbin/nologin 2> /dev/null
                 fi
@@ -374,7 +374,7 @@ jobs:
 
         # 卸载后步骤
         %postun
-        if [ $1 == 0 ]; then
+        if [ \$1 == 0 ]; then
                 systemctl disable zabbix_agent
                 rm -rf /usr/lib/systemd/system/zabbix_agent.service
                 rm -rf /usr/local/sbin/zabbix_agentd
@@ -748,7 +748,7 @@ jobs:
         %post
         if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
-                if [ $? -ne 0 ]
+                if [ \$? -ne 0 ]
                 then
                 groupadd zabbix
                 fi
@@ -864,7 +864,7 @@ jobs:
         %post
         if [ \$1 == 1 ]; then
         egrep zabbix /etc/group >& /dev/null
-                if [ $? -ne 0 ]
+                if [ \$? -ne 0 ]
                 then
                 groupadd zabbix
                 fi
