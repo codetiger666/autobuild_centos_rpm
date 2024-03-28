@@ -54,8 +54,8 @@ fi
 %defattr(-,root,root,0755)
 %{_usr}/local/bin/onedrive
 %{_usr}/local/etc/logrotate.d/onedrive
-%{_usr}/lib/systemd/user/onedrive.service
-%{_usr}/lib/systemd/system/onedrive@.service
+%{_usr}/lib/systemd/system/onedrive.service
+%{_usr}/local/onedrive/onedrive
 %config(noreplace) %{_usr}/local/onedrive/conf/config
 # 文档
 %doc
