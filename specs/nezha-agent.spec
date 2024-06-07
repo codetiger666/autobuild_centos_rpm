@@ -1,4 +1,4 @@
-Name:           哪吒监控agent
+Name:           nezha agent
 Version:        codetiger_version
 Release:        1%{?dist}
 Summary:        哪吒监控agent编译
