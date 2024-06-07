@@ -83,9 +83,9 @@ jobs:
         sudo mkdir -p centos_rpms/rocky/9/x86_64/
         cd centos_rpms
         git pull
-        rm -f rocky/9/x86_64/nezha-agent*.x86_64.rpm
+        rm -f rocky/9/x86_64/nezha_agent*.x86_64.rpm
         cd ..
-        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/nezha-agent-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/nezha_agent-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms rockylinux:9`
         docker exec -i $rpms dnf install createrepo -y
         docker exec -i $rpms createrepo /centos_rpms/rocky/9/x86_64/
