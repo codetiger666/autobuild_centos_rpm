@@ -17,11 +17,22 @@ rm -rf %{_builddir}/*
 cp %{SOURCE0} %{_builddir}
 unzip -d %{name}-%{version} %{SOURCE0}
 
+%pre
+if [ $1 == 1 ]; then
+    id 3000 &> /dev/null
+    if [ $? -ne 0 ]
+    then
+    groupadd -g 3000 onedrive 2> /dev/null
+    useradd -u 3000 -g onedrive onedrive -s /sbin/nologin 2> /dev/null
+    fi
+fi
+
 %install
 %{__mkdir} -p %{buildroot}/usr/local/nezha
 cp %{name}-%{version}/nezha-agent %{buildroot}/usr/local/nezha/nezha-agent
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/lib/systemd/system/nezha-agent.service
 %{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}/usr/local/nezha/nezha-agent.sh
+chown -R 3000:3000 %{buildroot}/usr/local/nezha
 
 %files
 %{_usr}/local/nezha/nezha-agent
