@@ -37,14 +37,9 @@ jobs:
       continue-on-error: true
       run: |
         mkdir rpm
-        centos=`docker run -itd -v $(pwd)/rpm:/opt rockylinux:9`
+        centos=`docker run -itd -v $(pwd)/rpm:/opt ghcr.io/codetiger666/images/rocky:`
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
-        docker exec -i $centos dnf install wget -y
-        docker exec -i $centos rm -rf /etc/yum.repos.d
-        docker exec -i $centos mkdir /etc/yum.repos.d
-        docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/rocky/rocky.repo
-        docker exec -i $centos dnf install -y pcre-devel ldc libevent-devel sqlite-devel net-snmp-devel mysql-community-client mysql-community-common mysql-community-devel mysql-community-libs rpmdevtools libssh2-devel OpenIPMI-devel openssl-devel libxslt* perl-ExtUtils-Embed gcc-c++ python subversion gperf make rpm-build git curl bzip2-devel libcurl-devel gd gd-devel  libtidy libtidy-devel GeoIP-devel libatomic_ops-devel zlib-devel unzip libstdc++* net-snmp-utils gmp gmp-devel gmp gmp-devel openldap openldap-devel libpcap-devel glib2-devel GeoIP-devel libxml2-devel libxml2-devel vim wget automake mlocate openssl-devel pam-devel unzip gcc screen openssl openssl-devel bash-completion* pcre-devel libxslt* perl-ExtUtils-Embed gcc-c++ --skip-broken
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos rpmdev-setuptree
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
@@ -65,6 +60,7 @@ jobs:
         mkdir rpm/rpmbuild/SOURCES -p
         sudo /bin/cp nezha-agent_linux_amd64.zip rpm/rpmbuild/SOURCES
         sudo /bin/cp nezha/nezha-agent.sh rpm/rpmbuild/SOURCES
+        sudo /bin/cp nezha/agent.conf rpm/rpmbuild/SOURCES
         sudo /bin/cp services/nezha-agent.service rpm/rpmbuild/SOURCES
         source $HOME/.profile
         docker stop $centos
@@ -86,8 +82,7 @@ jobs:
         rm -f rocky/9/x86_64/nezha_agent*.x86_64.rpm
         cd ..
         sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/nezha_agent-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
-        rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms rockylinux:9`
-        docker exec -i $rpms dnf install createrepo -y
+        rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms ghcr.io/codetiger666/images/rocky:9`
         docker exec -i $rpms createrepo /centos_rpms/rocky/9/x86_64/
 
     - name: git add
@@ -96,27 +91,17 @@ jobs:
         git pull
         git config --local user.email ${{ secrets.email }}
         git config --local user.name "codetiger666"
-        git add ./
-        git commit -m "update nezha agent"
-        git pull
+        # 创建一个新的孤立分支
+        git checkout --orphan temp_main
+        # 添加所有文件并进行提交
+        git add -A
+        git commit -m "update"
+        # 删除旧的 main 分支并将新分支重命名为 main
+        git branch -D main
+        git branch -m main
+        git set-url origin https://${GITHUBTOKEN}@github.com/codetiger666/centos_rpms.git
+        git push -f origin main
 
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     directory: ./centos_rpms
-    #     repository: codetiger666/centos_rpms
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     branch: main
-    - name: Pushes to another repository
-      uses: cpina/github-action-push-to-another-repository@main
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.GITHUBTOKEN }}
-      with:
-        source-directory: 'centos_rpms'
-        destination-github-username: 'codetiger666'
-        destination-repository-name: 'centos_rpms'
-        user-email: ${{ secrets.email }}
-        target-branch: main
     
     - name: Remove workflow runs
       uses: GitRML/delete-workflow-runs@main

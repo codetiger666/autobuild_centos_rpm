@@ -8,6 +8,7 @@ URL:            https://gybyt.cn
 Source0:        https://github.com/nezhahq/agent/releases/download/v%{version}/nezha-agent_linux_amd64.zip
 Source1:        nezha-agent.service
 Source2:        nezha-agent.sh
+Source3:        agent.conf
 
 %description
 
@@ -32,12 +33,18 @@ fi
 cp %{name}-%{version}/nezha-agent %{buildroot}/usr/local/nezha/nezha-agent
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/lib/systemd/system/nezha-agent.service
 %{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}/usr/local/nezha/nezha-agent.sh
-chown -R 3000:3000 %{buildroot}/usr/local/nezha
+
+# 安装后操作
+%post
+if [ $1 == 1 ]; then
+    chown -R 3000:3000 /usr/local/nezha
+fi
 
 %files
 %{_usr}/local/nezha/nezha-agent
 %{_usr}/local/nezha/nezha-agent.sh
 %{_usr}/lib/systemd/system/nezha-agent.service
+%config(noreplace) %{_usr}/local/nezha/agent.conf
 %doc
 
 %changelog
