@@ -37,7 +37,7 @@ jobs:
       continue-on-error: true
       run: |
         mkdir rpm
-        centos=`docker run -itd -v $(pwd)/rpm:/opt ghcr.io/codetiger666/images/rocky:`
+        centos=`docker run -itd -v $(pwd)/rpm:/opt ghcr.io/codetiger666/images/rocky:9`
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
