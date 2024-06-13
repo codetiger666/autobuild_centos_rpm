@@ -99,7 +99,7 @@ jobs:
         # 删除旧的 main 分支并将新分支重命名为 main
         git branch -D main
         git branch -m main
-        git set-url origin https://${GITHUBTOKEN}@github.com/codetiger666/centos_rpms.git
+        git remote set-url origin https://${GITHUBTOKEN}@github.com/codetiger666/centos_rpms.git
         git push -f origin main
 
     
