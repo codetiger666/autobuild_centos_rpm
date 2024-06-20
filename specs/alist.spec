@@ -39,6 +39,25 @@ if [ $1 == 1 ]; then
     chown -R alist:alist /usr/local/alist
 fi
 
+# 卸载前准备
+%preun
+if [ $1 == 0 ]; then
+    %if 0%{?use_systemd}
+        if [ -f /usr/lib/systemd/system/alist.service ]; then
+        %systemd_preun alist.service
+        fi
+    %endif
+fi
+
+# 卸载后步骤
+%postun
+if [ $1 == 0 ]; then
+    systemctl disable alist
+    userdel alist
+    groupdel alist
+    systemctl daemon-reload
+fi
+
 %files
 %{_usr}/local/alist/alist
 %{_usr}/local/alist/alist.sh
