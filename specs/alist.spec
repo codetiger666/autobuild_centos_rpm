@@ -29,9 +29,9 @@ fi
 
 %install
 %{__mkdir} -p %{buildroot}/usr/local/alist
-cp %{name}-%{version}/alist %{buildroot}/usr/local/nezha/alist
+cp %{name}-%{version}/alist %{buildroot}/usr/local/alist/alist
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/lib/systemd/system/alist.service
-%{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}/usr/local/nezha/alist.sh
+%{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}/usr/local/alist/alist.sh
 
 # 安装后操作
 %post
