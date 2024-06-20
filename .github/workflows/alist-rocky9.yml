@@ -59,7 +59,7 @@ jobs:
         wget https://github.com/alist-org/alist/releases/download/v${VERSION}/alist-linux-amd64.tar.gz -O alist.tar.gz
         mkdir rpm/rpmbuild/SOURCES -p
         sudo /bin/cp alist.tar.gz rpm/rpmbuild/SOURCES
-        sudo /bin/cp nezha/alist.sh rpm/rpmbuild/SOURCES
+        sudo /bin/cp alist/alist.sh rpm/rpmbuild/SOURCES
         sudo /bin/cp services/alist.service rpm/rpmbuild/SOURCES
         source $HOME/.profile
         docker stop $centos
