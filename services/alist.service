@@ -3,8 +3,8 @@ Description=Alist start stop
 After=network-online.target
 
 [Service]
-User=3000
-Group=3000
+User=alist
+Group=alist
 Type=forking
 WorkingDirectory=/usr/local/alist
 ExecStart=/usr/local/alist/alist.sh start
