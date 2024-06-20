@@ -15,6 +15,7 @@ Source2:        alist.sh
 %prep
 rm -rf %{_builddir}/*
 cp %{SOURCE0} %{_builddir}
+mkdir -p %{name}-%{version}
 tar -xf %{SOURCE0} -C %{name}-%{version}
 
 %pre
