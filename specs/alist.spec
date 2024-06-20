@@ -41,7 +41,7 @@ fi
 
 %files
 %{_usr}/local/alist/alist
-%{_usr}/local/alist/alist
+%{_usr}/local/alist/alist.sh
 %{_usr}/lib/systemd/system/alist.service
 %doc
 
