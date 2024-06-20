@@ -15,8 +15,7 @@ Source2:        alist.sh
 %prep
 rm -rf %{_builddir}/*
 cp %{SOURCE0} %{_builddir}
-mkdir -p %{name}-%{version}
-tar -xf -C %{name}-%{version} %{SOURCE0}
+tar -xf %{SOURCE0} -C %{name}-%{version}
 
 %pre
 if [ $1 == 1 ]; then
