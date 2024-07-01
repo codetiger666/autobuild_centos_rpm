@@ -20,7 +20,7 @@ sed -i 's/OnlyLocal:         true/OnlyLocal:         false/g' ./alist/drivers/qu
 git clone --recurse-submodules https://github.com/alist-org/alist-web.git -b codetiger_version
 cd alist-web
 wget https://crowdin.com/backend/download/project/alist/zh-CN.zip
-unzip 'alist (zh-CN).zip'
+unzip zh-CN.zip
 node ./scripts/i18n.mjs
 pnpm install && pnpm build
 cp ./dist ../alist/public -ra
