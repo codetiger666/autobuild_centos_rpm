@@ -15,7 +15,7 @@ Source2:        alist.sh
 %prep
 rm -rf %{_builddir}/*
 cd %{_builddir}
-git clone https://kkgithub.com/alist-org/alist.git -b vcodetiger_version
+git clone https://github.com/alist-org/alist.git -b vcodetiger_version
 sed -i 's/OnlyLocal:         true/OnlyLocal:         false/g' ./alist/drivers/quark_uc/meta.go
 git clone --recurse-submodules https://github.com/alist-org/alist-web.git -b codetiger_version
 cd alist-web
