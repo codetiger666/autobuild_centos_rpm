@@ -5,9 +5,8 @@ Summary:        alist网盘
 
 License:        GPL
 URL:            https://gybyt.cn
-Source0:        https://github.com/alist-org/alist.git
-Source1:        alist.service
-Source2:        alist.sh
+Source0:        alist.service
+Source1:        alist.sh
 
 %description
 
@@ -59,8 +58,8 @@ fi
 %install
 %{__mkdir} -p %{buildroot}/usr/local/alist
 cp %{name}-%{version}/alist %{buildroot}/usr/local/alist/alist
-%{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/lib/systemd/system/alist.service
-%{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}/usr/local/alist/alist.sh
+%{__install} -p -D -m 0644 %{SOURCE0} %{buildroot}%{_usr}/lib/systemd/system/alist.service
+%{__install} -p -D -m 0755 %{SOURCE1} %{buildroot}/usr/local/alist/alist.sh
 
 # 安装后操作
 %post
