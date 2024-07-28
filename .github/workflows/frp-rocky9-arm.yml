@@ -11,6 +11,7 @@ on:
 
 env:
   VERSION: 0.59.0
+  ARCH: arm64
   REMOVE_WORKFLOW_RUNS: true
 
 jobs:     
