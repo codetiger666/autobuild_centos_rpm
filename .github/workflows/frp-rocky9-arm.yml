@@ -61,6 +61,7 @@ jobs:
         sudo /bin/cp frp/frpc.service rpm/rpmbuild/SOURCES
         sudo /bin/cp frp/frps.service rpm/rpmbuild/SOURCES
         sudo sed -i "s/codetiger_version/$VERSION/g" specs/frp.spec
+        sudo sed -i "s/codetiger_arch/$ARCH/g" specs/frp.spec
         sudo /bin/cp specs/frp.spec rpm/rpmbuild/SPECS/
         wget https://github.com/fatedier/frp/releases/download/v$VERSION/frp_"$VERSION"_linux_arm64.tar.gz
         sudo /bin/cp frp_"$VERSION"_linux_arm64.tar.gz rpm/rpmbuild/SOURCES/

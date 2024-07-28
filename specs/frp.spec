@@ -17,7 +17,7 @@ Source2:        frps.service
 rm -rf %{_builddir}/*
 cp %{SOURCE0} %{_builddir}
 tar xf %{SOURCE0}
-mv frp_%{version}_linux_$ARCH %{name}-%{version}
+mv frp_%{version}_linux_codetiger_arch %{name}-%{version}
 
 
 %install
