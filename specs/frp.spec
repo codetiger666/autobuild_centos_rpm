@@ -5,7 +5,7 @@ Summary:        frp编译
 
 License:        GPL
 URL:            https://gybyt.cn
-Source0:        https://github.com/fatedier/frp/releases/download/v%{version}/%{name}_%{version}_linux_amd64.tar.gz
+Source0:        https://github.com/fatedier/frp/releases/download/v%{version}/%{name}_%{version}_linux_arm64.tar.gz
 Source1:        frpc.service
 Source2:        frps.service
     
