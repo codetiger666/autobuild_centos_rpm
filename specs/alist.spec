@@ -5,18 +5,46 @@ Summary:        alist网盘
 
 License:        GPL
 URL:            https://gybyt.cn
-Source0:        https://github.com/alist-org/alist/releases/download/alist.tar.gz
-Source1:        alist.service
-Source2:        alist.sh
+Source0:        alist.service
+Source1:        alist.sh
 
 %description
 
 
 %prep
 rm -rf %{_builddir}/*
-cp %{SOURCE0} %{_builddir}
+cd %{_builddir}
+git clone https://github.com/alist-org/alist.git -b vcodetiger_version
+sed -i 's/OnlyLocal:         true/OnlyLocal:         false/g' ./alist/drivers/quark_uc/meta.go
+git clone --recurse-submodules https://github.com/alist-org/alist-web.git -b codetiger_version
+cd alist-web
+wget https://crowdin.com/backend/download/project/alist/zh-CN.zip
+unzip zh-CN.zip
+node ./scripts/i18n.mjs
+pnpm install && pnpm build
+cp ./dist ../alist/public -ra
+cd %{_builddir}/alist
+appName="alist"
+builtAt="$(date +'%F %T %z')"
+goVersion=$(go version | sed 's/go version //')
+gitAuthor=$(git show -s --format='format:%aN <%ae>' HEAD)
+gitCommit=$(git log --pretty=format:"%h" -1)
+version=$(git describe --long --tags --dirty --always)
+webVersion=$(wget -qO- -t1 -T2 "https://api.github.com/repos/alist-org/alist-web/releases/latest" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g')
+ldflags="\
+-w -s \
+-X 'github.com/alist-org/alist/v3/internal/conf.BuiltAt=$builtAt' \
+-X 'github.com/alist-org/alist/v3/internal/conf.GoVersion=$goVersion' \
+-X 'github.com/alist-org/alist/v3/internal/conf.GitAuthor=$gitAuthor' \
+-X 'github.com/alist-org/alist/v3/internal/conf.GitCommit=$gitCommit' \
+-X 'github.com/alist-org/alist/v3/internal/conf.Version=$version' \
+-X 'github.com/alist-org/alist/v3/internal/conf.WebVersion=$webVersion' \
+"
+go build -ldflags="$ldflags" .
+cd %{_builddir}/
 mkdir -p %{name}-%{version}
-tar -xf %{SOURCE0} -C %{name}-%{version}
+cp ./alist/alist %{name}-%{version}/alist
+
 
 %pre
 if [ $1 == 1 ]; then
@@ -30,8 +58,8 @@ fi
 %install
 %{__mkdir} -p %{buildroot}/usr/local/alist
 cp %{name}-%{version}/alist %{buildroot}/usr/local/alist/alist
-%{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/lib/systemd/system/alist.service
-%{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}/usr/local/alist/alist.sh
+%{__install} -p -D -m 0644 %{SOURCE0} %{buildroot}%{_usr}/lib/systemd/system/alist.service
+%{__install} -p -D -m 0755 %{SOURCE1} %{buildroot}/usr/local/alist/alist.sh
 
 # 安装后操作
 %post
