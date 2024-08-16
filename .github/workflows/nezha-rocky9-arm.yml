@@ -59,7 +59,7 @@ jobs:
       run: |
         sudo sed -i "s/codetiger_version/$VERSION/g" specs/nezha-agent.spec
         sudo /bin/cp specs/nezha-agent.spec rpm/rpmbuild/SPECS/nezha-agent.spec
-        wget https://github.com/nezhahq/agent/releases/download/v0.16.11/nezha-agent_linux_arm64.zip
+        wget https://github.com/nezhahq/agent/releases/download/v$VERSION/nezha-agent_linux_arm64.zip
         mkdir rpm/rpmbuild/SOURCES -p
         sudo /bin/cp nezha-agent_linux_arm64.zip rpm/rpmbuild/SOURCES/nezha-agent_linux_amd64.zip
         sudo /bin/cp nezha/nezha-agent.sh rpm/rpmbuild/SOURCES
