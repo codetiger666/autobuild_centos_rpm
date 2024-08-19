@@ -61,7 +61,7 @@ jobs:
         sudo /bin/cp specs/onedrive.spec rpm/rpmbuild/SPECS/onedrive.spec
         wget https://github.com/abraunegg/onedrive/archive/refs/tags/v2.5.0-rc3.tar.gz
         mkdir rpm/rpmbuild/SOURCES -p
-        tar -xf v$VERSION.tar.gz
+        tar -xf v$VERSION-rc3.tar.gz
         mv onedrive-2.5.0-rc3 onedrive-2.5.0
         tar -zcvf onedrive-2.5.0.tar.gz onedrive-2.5.0
         sudo /bin/cp onedrive-2.5.0.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
