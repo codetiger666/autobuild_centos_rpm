@@ -104,14 +104,8 @@ jobs:
         git branch -D main
         git branch -m main
         git remote set-url origin https://${{ secrets.GITHUBTOKEN }}@github.com/codetiger666/centos_rpms.git
+        git push -f origin main
 
-    # - name: Push changes
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     directory: ./centos_rpms
-    #     repository: codetiger666/centos_rpms
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     branch: main
     - name: Pushes to another repository
       uses: cpina/github-action-push-to-another-repository@main
       env:
