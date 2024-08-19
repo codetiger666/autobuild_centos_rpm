@@ -37,18 +37,13 @@ jobs:
       continue-on-error: true
       run: |
         mkdir rpm
-        centos=`docker run -itd -v $(pwd)/rpm:/opt rockylinux:9`
+        centos=`docker run -itd -v $(pwd)/rpm:/opt ghcr.io/codetiger666/images/rocky:9`
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
-        docker exec -i $centos dnf install wget -y
-        docker exec -i $centos rm -rf /etc/yum.repos.d
-        docker exec -i $centos mkdir /etc/yum.repos.d
-        docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/rocky/rocky.repo
-        docker exec -i $centos dnf install -y pcre-devel ldc libevent-devel sqlite-devel net-snmp-devel mysql-community-client mysql-community-common mysql-community-devel mysql-community-libs rpmdevtools libssh2-devel OpenIPMI-devel openssl-devel libxslt* perl-ExtUtils-Embed gcc-c++ python subversion gperf make rpm-build git curl bzip2-devel libcurl-devel gd gd-devel  libtidy libtidy-devel GeoIP-devel libatomic_ops-devel zlib-devel unzip libstdc++* net-snmp-utils gmp gmp-devel gmp gmp-devel openldap openldap-devel libpcap-devel glib2-devel GeoIP-devel libxml2-devel libxml2-devel vim wget automake mlocate openssl-devel pam-devel unzip gcc screen openssl openssl-devel bash-completion* pcre-devel libxslt* perl-ExtUtils-Embed gcc-c++ --skip-broken
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos rpmdev-setuptree
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
-        
+          
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@main
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
@@ -61,9 +56,12 @@ jobs:
       run: |
         sudo sed -i "s/codetiger_version/$VERSION/g" specs/onedrive.spec
         sudo /bin/cp specs/onedrive.spec rpm/rpmbuild/SPECS/onedrive.spec
-        wget https://github.com/abraunegg/onedrive/archive/refs/tags/v$VERSION.tar.gz
+        wget https://github.com/abraunegg/onedrive/archive/refs/tags/v2.5.0-rc3.tar.gz
         mkdir rpm/rpmbuild/SOURCES -p
-        sudo /bin/cp v$VERSION.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
+        tar -xf v$VERSION-rc3.tar.gz
+        mv onedrive-2.5.0-rc3 onedrive-2.5.0
+        tar -zcvf onedrive-2.5.0.tar.gz onedrive-2.5.0
+        sudo /bin/cp onedrive-2.5.0.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
         sudo /bin/cp onedrive/config rpm/rpmbuild/SOURCES
         sudo /bin/cp onedrive/onedrive rpm/rpmbuild/SOURCES
         sudo /bin/cp services/onedrive.service rpm/rpmbuild/SOURCES
@@ -97,9 +95,15 @@ jobs:
         git pull
         git config --local user.email ${{ secrets.email }}
         git config --local user.name "codetiger666"
-        git add ./
-        git commit -m "update onedrive"
-        git pull
+        # 创建一个新的孤立分支
+        git checkout --orphan temp_main
+        # 添加所有文件并进行提交
+        git add -A
+        git commit -m "update"
+        # 删除旧的 main 分支并将新分支重命名为 main
+        git branch -D main
+        git branch -m main
+        git remote set-url origin https://${{ secrets.GITHUBTOKEN }}@github.com/codetiger666/centos_rpms.git
 
     # - name: Push changes
     #   uses: ad-m/github-push-action@master
