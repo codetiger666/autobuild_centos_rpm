@@ -3,7 +3,7 @@ Description=Onedrive Service
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
 User=3000
 Group=3000
 Restart=on-failure
