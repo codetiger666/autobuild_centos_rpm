@@ -63,7 +63,7 @@ jobs:
         git clone https://github.com/abraunegg/onedrive.git -b onedrive-v2.5.0-release-candidate-3 onedrive-${VERSION}
         mkdir rpm/rpmbuild/SOURCES -p
         tar -zcvf onedrive-${VERSION}.tar.gz onedrive-${VERSION}
-        sudo /bin/cp onedrive-2.5.0.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
+        sudo /bin/cp onedrive-${VERSION}.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
         sudo /bin/cp onedrive/config rpm/rpmbuild/SOURCES
         sudo /bin/cp onedrive/onedrive rpm/rpmbuild/SOURCES
         sudo /bin/cp services/onedrive.service rpm/rpmbuild/SOURCES
