@@ -10,7 +10,7 @@ on:
   #   - cron: 0 10 * * *
 
 env:
-  VERSION: 2.5.0
+  VERSION: 2.5.0.0
   REMOVE_WORKFLOW_RUNS: true
 
 jobs:     
@@ -56,12 +56,11 @@ jobs:
       run: |
         sudo sed -i "s/codetiger_version/$VERSION/g" specs/onedrive.spec
         sudo /bin/cp specs/onedrive.spec rpm/rpmbuild/SPECS/onedrive.spec
-        wget https://github.com/abraunegg/onedrive/archive/refs/tags/v2.5.0-rc3.tar.gz
+        # wget https://github.com/abraunegg/onedrive/archive/refs/tags/v2.5.0-rc3.tar.gz
+        git clone https://github.com/abraunegg/onedrive.git -b onedrive-v2.5.0-release-candidate-3 onedrive-${VERSION}
         mkdir rpm/rpmbuild/SOURCES -p
-        tar -xf v$VERSION-rc3.tar.gz
-        mv onedrive-2.5.0-rc3 onedrive-2.5.0
-        tar -zcvf onedrive-2.5.0.tar.gz onedrive-2.5.0
-        sudo /bin/cp onedrive-2.5.0.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
+        tar -zcvf onedrive-${VERSION}.tar.gz onedrive-${VERSION}
+        sudo /bin/cp onedrive-${VERSION}.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
         sudo /bin/cp onedrive/config rpm/rpmbuild/SOURCES
         sudo /bin/cp onedrive/onedrive rpm/rpmbuild/SOURCES
         sudo /bin/cp services/onedrive.service rpm/rpmbuild/SOURCES
