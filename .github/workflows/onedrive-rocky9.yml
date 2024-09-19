@@ -81,7 +81,7 @@ jobs:
         sudo mkdir -p centos_rpms/rocky/9/x86_64/
         cd centos_rpms
         git pull
-        rm -f rocky/9/x86_64/onedirve*.x86_64.rpm
+        rm -f rocky/9/x86_64/onedrive-*.el9.x86_64.rpm
         cd ..
         sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/onedrive-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms rockylinux:9`
