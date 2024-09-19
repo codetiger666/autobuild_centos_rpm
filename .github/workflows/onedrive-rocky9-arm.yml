@@ -59,7 +59,7 @@ jobs:
       run: |
         sudo sed -i "s/codetiger_version/$VERSION/g" specs/onedrive.spec
         sudo /bin/cp specs/onedrive.spec rpm/rpmbuild/SPECS/onedrive.spec
-        wget https://github.com/abraunegg/onedrive/archive/refs/tags/$VERSION.tar.gz
+        wget https://github.com/abraunegg/onedrive/archive/refs/tags/v$VERSION.tar.gz
         # git clone https://github.com/abraunegg/onedrive.git -b onedrive-v2.5.0-release-candidate-3 onedrive-${VERSION}
         mkdir rpm/rpmbuild/SOURCES -p
         # tar -zcvf onedrive-${VERSION}.tar.gz onedrive-${VERSION}
