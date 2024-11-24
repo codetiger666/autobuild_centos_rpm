@@ -10,7 +10,7 @@ on:
   #   - cron: 0 10 * * *
 
 env:
-  OPENRESTYVERSION: 1.25.3.1
+  OPENRESTYVERSION: 1.27.1.1
   PERLVERSION: 5.32
   REMOVE_WORKFLOW_RUNS: true
 
