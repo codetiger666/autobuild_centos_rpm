@@ -62,7 +62,6 @@ jobs:
         wget https://github.com/abraunegg/onedrive/archive/refs/tags/v${VERSION}.tar.gz
         mkdir rpm/rpmbuild/SOURCES -p
         tar -xf v${VERSION}.tar.gz
-        mv v${VERSION} onedrive-${VERSION}
         tar -zcvf onedrive-${VERSION}.tar.gz onedrive-${VERSION}
         sudo /bin/cp onedrive-${VERSION}.tar.gz rpm/rpmbuild/SOURCES/onedrive-$VERSION.tar.gz
         sudo /bin/cp onedrive/config rpm/rpmbuild/SOURCES
