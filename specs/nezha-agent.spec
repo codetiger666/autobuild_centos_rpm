@@ -20,6 +20,9 @@ unzip -d %{name}-%{version} %{SOURCE0}
 
 %pre
 if [ $1 == 1 ]; then
+    id nezha &> /dev/null
+    if [ $? -ne 0 ]
+    then
     useradd nezha -s /sbin/nologin 2> /dev/null
     fi
 fi
