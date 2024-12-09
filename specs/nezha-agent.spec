@@ -20,11 +20,7 @@ unzip -d %{name}-%{version} %{SOURCE0}
 
 %pre
 if [ $1 == 1 ]; then
-    id 3000 &> /dev/null
-    if [ $? -ne 0 ]
-    then
-    groupadd -g 3000 onedrive 2> /dev/null
-    useradd -u 3000 -g onedrive onedrive -s /sbin/nologin 2> /dev/null
+    useradd nezha -s /sbin/nologin 2> /dev/null
     fi
 fi
 
@@ -38,7 +34,7 @@ cp %{name}-%{version}/nezha-agent %{buildroot}/usr/local/nezha/nezha-agent
 # 安装后操作
 %post
 if [ $1 == 1 ]; then
-    chown -R 3000:3000 /usr/local/nezha
+    chown -R nezha:nezha /usr/local/nezha
 fi
 
 %files
