@@ -24,6 +24,16 @@ onedrive编译
 CFLAGS="-fPIC" ./configure
 make -j6
 
+%pre
+if [ $1 == 1 ]; then
+    id 3000 &> /dev/null
+    if [ $? -ne 0 ]
+    then
+    groupadd onedrive -g 3000
+    useradd onedrive -s /sbin/nologin -u 3000 -g 3000 2> /dev/null
+    fi
+fi
+
 # 安装
 %install
 make install DESTDIR=%{buildroot}
@@ -33,6 +43,12 @@ rm -rf %{buildroot}/usr/lib/systemd/user/onedrive.service
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/onedrive.service
 %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}/usr/local/onedrive/conf/config
 %{__install} -p -D -m 0755 %{SOURCE3} %{buildroot}/usr/local/onedrive/onedrive
+
+# 安装后操作
+%post
+if [ $1 == 1 ]; then
+    chown -R 3000:3000 /usr/local/onedrive
+fi
 
 # 卸载前准备
 %preun
