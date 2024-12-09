@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 Type=forking
-User=3000
-Group=3000
+User=nezha
+Group=nezha
 Restart=on-failure
 RestartSec=5s
 ExecStart=/usr/local/nezha/nezha-agent.sh start
