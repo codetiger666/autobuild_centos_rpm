@@ -3,14 +3,9 @@ PROGRAM_PATH=$(dirname "$(realpath "$0")")
 APP_NAME=nezha-agent
 CONF=$PROGRAM_PATH/agent.conf
 
-function get_property {
-    local key=$1
-    grep -w "$key" "$CONF" | cut -d'=' -f2-
-}
-
 case "$1" in
 start)
-    ${PROGRAM_PATH}/${APP_NAME} --disable-auto-update --disable-command-execute --disable-force-update -p $(get_property 'key') $( [ "$(get_property 'tls')" = true ] && echo "--tls" || echo "" ) -s "$(get_property 'server')" > ${PROGRAM_PATH}/${APP_NAME}.log 2>&1 &
+    ${PROGRAM_PATH}/${APP_NAME} －c ${PROGRAM_PATH}/${CONF} > ${PROGRAM_PATH}/${APP_NAME}.log 2>&1 &
     echo $! > $PROGRAM_PATH/$APP_NAME.pid
     ;;
 stop)
