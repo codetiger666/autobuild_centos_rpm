@@ -10,7 +10,7 @@ on:
   #   - cron: 0 10 * * *
 
 env:
-  VERSION: 0.19.3
+  VERSION: 1.1.1
   REMOVE_WORKFLOW_RUNS: true
 
 jobs:     
