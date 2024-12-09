@@ -5,7 +5,7 @@ CONF=$PROGRAM_PATH/agent.conf
 
 case "$1" in
 start)
-    ${PROGRAM_PATH}/${APP_NAME} －c ${PROGRAM_PATH}/${CONF} > ${PROGRAM_PATH}/${APP_NAME}.log 2>&1 &
+    ${PROGRAM_PATH}/${APP_NAME} -c ${CONF} > ${PROGRAM_PATH}/${APP_NAME}.log 2>&1 &
     echo $! > $PROGRAM_PATH/$APP_NAME.pid
     ;;
 stop)
