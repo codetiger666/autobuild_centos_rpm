@@ -82,7 +82,7 @@ jobs:
         git pull
         rm -f rocky/9/x86_64/openssh-*.el9.x86_64.rpm
         cd ..
-        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openssh-server-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openssh-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms rockylinux:9`
         docker exec -i $rpms dnf install createrepo -y
         docker exec -i $rpms createrepo /centos_rpms/rocky/9/x86_64/
