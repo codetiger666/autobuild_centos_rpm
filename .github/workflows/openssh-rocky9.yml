@@ -42,7 +42,8 @@ jobs:
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
-        docker exec -i $centos rpmdev-setuptree zlib-devel libselinux-devel openssl-devel-$OPENSSL_VERSION
+        docker exec -i $centos dnf install -y zlib-devel libselinux-devel openssl-devel-$OPENSSL_VERSION
+        docker exec -i $centos rpmdev-setuptree
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
           
     - name: SSH connection to Actions
