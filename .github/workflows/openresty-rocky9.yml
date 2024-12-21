@@ -38,14 +38,9 @@ jobs:
       continue-on-error: true
       run: |
         mkdir rpm
-        centos=`docker run -itd -v $(pwd)/rpm:/opt rockylinux:9`
+        centos=`docker run -itd -v $(pwd)/rpm:/opt ghcr.io/codetiger666/images/rocky:9`
         echo "export centos=$centos" >> $HOME/.profile
         source $HOME/.profile
-        docker exec -i $centos dnf install wget -y
-        docker exec -i $centos rm -rf /etc/yum.repos.d
-        docker exec -i $centos mkdir /etc/yum.repos.d
-        docker exec -i $centos wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/rocky/rocky.repo
-        docker exec -i $centos dnf install -y pcre-devel libevent-devel sqlite-devel net-snmp-devel mysql-community-client mysql-community-common mysql-community-devel mysql-community-libs rpmdevtools libssh2-devel OpenIPMI-devel openssl-devel libxslt* perl-ExtUtils-Embed gcc-c++ python subversion gperf make rpm-build git curl bzip2-devel libcurl-devel gd gd-devel  libtidy libtidy-devel GeoIP-devel libatomic_ops-devel zlib-devel unzip libstdc++* net-snmp-utils gmp gmp-devel gmp gmp-devel openldap openldap-devel libpcap-devel glib2-devel GeoIP-devel libxml2-devel libxml2-devel vim wget automake mlocate openssl-devel pam-devel unzip gcc screen openssl openssl-devel bash-completion* pcre-devel libxslt* perl-ExtUtils-Embed gcc-c++ --skip-broken
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos rpmdev-setuptree
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
