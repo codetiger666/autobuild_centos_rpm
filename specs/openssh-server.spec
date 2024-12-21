@@ -1,4 +1,4 @@
-Name:           openssh-server
+Name:           openssh
 Version:        codetiger_version
 Release:        1%{?dist}
 Summary:        openssh-server编译
@@ -6,9 +6,7 @@ Summary:        openssh-server编译
 License:        GPL
 URL:            https://gybyt.cn
 Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
-Source1:        onedrive.service
-Source2:        config
-Source3:        onedrive
+Source1:        sshd.service
 
 BuildRequires:  openssl-devel == openssl_version
 BuildRequires:  zlib-devel cmake gcc libselinux-devel
@@ -44,11 +42,38 @@ fi
 # 文件列表
 %files
 %defattr(-,root,root,0755)
-%dir /etc
-%dir /usr
-%dir /var
-%config(noreplace) %{_etc}/ssh/ssh_config
-%config(noreplace) %{_etc}/ssh/sshd_config
+/etc/ssh/moduli
+%{_usr}/bin/scp
+%{_usr}/bin/sftp
+%{_usr}/bin/ssh
+%{_usr}/bin/ssh-add
+%{_usr}/bin/ssh-agent
+%{_usr}/bin/ssh-keygen
+%{_usr}/bin/ssh-keyscan
+%{_usr}/lib/systemd/system/sshd.service
+%{_usr}/libexec/sftp-server
+%{_usr}/libexec/ssh-keysign
+%{_usr}/libexec/ssh-pkcs11-helper
+%{_usr}/libexec/ssh-sk-helper
+%{_usr}/libexec/sshd-session
+%{_usr}/sbin/sshd
+%{_usr}/share/man/man1/scp.1.gz
+%{_usr}/share/man/man1/sftp.1.gz
+%{_usr}/share/man/man1/ssh-add.1.gz
+%{_usr}/share/man/man1/ssh-agent.1.gz
+%{_usr}/share/man/man1/ssh-keygen.1.gz
+%{_usr}/share/man/man1/ssh-keyscan.1.gz
+%{_usr}/share/man/man1/ssh.1.gz
+%{_usr}/share/man/man5/moduli.5.gz
+%{_usr}/share/man/man5/ssh_config.5.gz
+%{_usr}/share/man/man5/sshd_config.5.gz
+%{_usr}/share/man/man8/sftp-server.8.gz
+%{_usr}/share/man/man8/ssh-keysign.8.gz
+%{_usr}/share/man/man8/ssh-pkcs11-helper.8.gz
+%{_usr}/share/man/man8/ssh-sk-helper.8.gz
+%{_usr}/share/man/man8/sshd.8.gz
+%config(noreplace) /etc/ssh/ssh_config
+%config(noreplace) /etc/ssh/sshd_config
 # 文档
 %doc
 
