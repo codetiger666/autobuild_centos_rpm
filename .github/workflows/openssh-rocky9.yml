@@ -55,9 +55,9 @@ jobs:
     # 编译
     - name: build
       run: |
-        sudo sed -i "s/codetiger_version/$VERSION/g" specs/sshd.spec
-        sudo sed -i "s/openssl_version/$OPENSSL_VERSION/g" specs/sshd.spec
-        sudo /bin/cp specs/sshd.spec rpm/rpmbuild/SPECS/sshd.spec
+        sudo sed -i "s/codetiger_version/$VERSION/g" specs/openssh-server.spec
+        sudo sed -i "s/openssl_version/$OPENSSL_VERSION/g" specs/openssh-server.spec
+        sudo /bin/cp specs/openssh-server.spec rpm/rpmbuild/SPECS/openssh-server.spec
         wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${VERSION}.tar.gz
         mkdir rpm/rpmbuild/SOURCES -p
         sudo /bin/cp openssh-v${VERSION}.tar.gz rpm/rpmbuild/SOURCES/openssh-${VERSION}.tar.gz
@@ -66,7 +66,7 @@ jobs:
         docker stop $centos
         docker start $centos
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
-        docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/sshd.spec
+        docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/openssh-server.spec
         
     - name: checkout_rpm
       run: |
@@ -81,7 +81,7 @@ jobs:
         git pull
         rm -f rocky/9/x86_64/openssh-*.el9.x86_64.rpm
         cd ..
-        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openssh-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
+        sudo /bin/cp rpm/rpmbuild/RPMS/x86_64/openssh-server-$VERSION-1.el9.x86_64.rpm centos_rpms/rocky/9/x86_64/
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms rockylinux:9`
         docker exec -i $rpms dnf install createrepo -y
         docker exec -i $rpms createrepo /centos_rpms/rocky/9/x86_64/
