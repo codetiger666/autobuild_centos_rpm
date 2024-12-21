@@ -9,7 +9,7 @@ Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{v
 Source1:        sshd.service
 
 BuildRequires:  openssl-devel == openssl_version
-BuildRequires:  zlib-devel cmake gcc libselinux-devel
+BuildRequires:  zlib-devel gcc libselinux-devel
 Requires: openssl == openssl_version
 Requires: zlib libselinux
 
