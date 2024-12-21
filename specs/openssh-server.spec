@@ -24,45 +24,31 @@ openssh-server编译
 
 # 编译
 %build
-CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc --with-selinux
+CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-selinux
 make -j6
 
 # 安装
 %install
 make install DESTDIR=%{buildroot}
-%{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/onedrive.service
-%{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}/usr/local/onedrive/conf/config
-%{__install} -p -D -m 0755 %{SOURCE3} %{buildroot}/usr/local/onedrive/onedrive
+%{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
 
-# 安装后操作
-%post
-if [ $1 == 1 ]; then
-    chown -R 3000:3000 /usr/local/onedrive
-fi
 
 # 卸载前准备
 %preun
 if [ $1 == 0 ]; then
-    if [ -f /usr/lib/systemd/system/onedrive.service ]; then
-    %systemd_preun onedrive.service
+    if [ -f /usr/lib/systemd/system/sshd.service ]; then
+    %systemd_preun sshd.service
     fi
-fi
-
-# 卸载后步骤
-%postun
-if [ $1 == 0 ]; then
-    systemctl disable onedrive
-    systemctl daemon-reload
 fi
 
 # 文件列表
 %files
 %defattr(-,root,root,0755)
-%{_usr}/local/bin/onedrive
-%{_usr}/local/etc/logrotate.d/onedrive
-%{_usr}/lib/systemd/system/onedrive.service
-%{_usr}/local/onedrive/onedrive
-%config(noreplace) %{_usr}/local/onedrive/conf/config
+%dir /etc
+%dir /usr
+%dir /var
+%config(noreplace) %{_etc}/ssh/ssh_config
+%config(noreplace) %{_etc}/ssh/sshd_config
 # 文档
 %doc
 
