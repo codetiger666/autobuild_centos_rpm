@@ -30,6 +30,16 @@ make -j6
 make install DESTDIR=%{buildroot}
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
 
+# 安装后操作
+%post
+if [ $1 == 1 ]; then
+    if [ -e /etc/ssh/ssh_host_rsa_key ]; then
+        chmod 0600 /etc/ssh/ssh_host_*_key
+        chown -R root:root /etc/ssh
+    else
+        ssh-keygen -A
+    fi
+fi
 
 # 卸载前准备
 %preun
