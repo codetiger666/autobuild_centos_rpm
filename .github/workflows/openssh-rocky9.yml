@@ -60,7 +60,7 @@ jobs:
         sudo /bin/cp specs/openssh-server.spec rpm/rpmbuild/SPECS/openssh-server.spec
         wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${VERSION}.tar.gz
         mkdir rpm/rpmbuild/SOURCES -p
-        sudo /bin/cp openssh-v${VERSION}.tar.gz rpm/rpmbuild/SOURCES/openssh-${VERSION}.tar.gz
+        sudo /bin/cp openssh-${VERSION}.tar.gz rpm/rpmbuild/SOURCES/openssh-${VERSION}.tar.gz
         sudo /bin/cp services/sshd.service rpm/rpmbuild/SOURCES
         source $HOME/.profile
         docker stop $centos
