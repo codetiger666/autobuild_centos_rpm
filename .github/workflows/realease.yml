@@ -1,19 +1,29 @@
-name: build-rocky9
+name: release
 on:
   workflow_dispatch:
       inputs:
-        ssh:
-          description: 'SSH connection to Actions'
-          required: true
-          default: 'false'
         program:
           description: '软件名称'
           required: true
-          default: 'openresty'
+          type: choice
+          options:
+            - openresty
+            - nezha-agent
+            - onedrive
+            - openssh-server
+            - frp
         version:
           description: '软件版本'
           required: true
           default: '1.0'
+        release:
+          description: '系统版本'
+          required: true
+          default: '9'
+          type: choice
+          options:
+            - 9
+            - 7
         remove:
           description: '是否删除历史版本'
           required: false
@@ -26,6 +36,14 @@ on:
           options:
             - x86_64
             - aarch64
+        ssh:
+          description: '是否开启ssh调试'
+          required: true
+          default: 'false'
+          type: choice
+          options:
+            - 'true'
+            - 'false'
 
 env:
   REMOVE_WORKFLOW_RUNS: true

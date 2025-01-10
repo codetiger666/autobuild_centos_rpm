@@ -1,11 +1,11 @@
-Name:           openssh
+Name:           openssh-server
 Version:        codetiger_version
 Release:        1%{?dist}
 Summary:        openssh-server编译
 
 License:        GPL
 URL:            https://gybyt.cn
-Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
+Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-server-%{version}.tar.gz
 Source1:        sshd.service
 
 BuildRequires:  openssl-devel == openssl_version

@@ -5,7 +5,7 @@ Summary:        哪吒监控agent编译
 
 License:        GPL
 URL:            https://gybyt.cn
-Source0:        https://github.com/nezhahq/agent/releases/download/v%{version}/nezha-agent_linux_amd64.zip
+Source0:        https://github.com/nezhahq/agent/releases/download/v%{version}/nezha-agent_linux_codetiger_arch.zip
 Source1:        nezha-agent.service
 Source2:        nezha-agent.sh
 Source3:        agent.conf
