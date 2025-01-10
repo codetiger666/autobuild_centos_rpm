@@ -23,13 +23,13 @@ cp %{SOURCE3} %{_builddir}
 cd %{_builddir}
 tar -xf %{SOURCE3}
 cd openssl-codetiger_openssl_version
-./config --prefix=/etc/ssh/openssl --openssldir=/etc/ssh/openssl
-make -j6 && make install DESTDIR=%{buildroot}/etc/ssh/openssl
+./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
+make -j6 && make install
 %setup -q
 
 # 编译
 %build
-CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/etc/ssh/openssl --with-selinux
+CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/usr/ssh/openssl --with-selinux --with-ssl-engine CPPFLAGS="-I/usr/ssh/openssl/include" LDFLAGS="-L/usr/ssh/openssl/lib"
 make -j6
 
 # 安装
