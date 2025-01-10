@@ -25,7 +25,6 @@ tar -xf %{SOURCE3}
 cd openssl-codetiger_openssl_version
 ./config --prefix=/etc/ssh/openssl --openssldir=/etc/ssh/openssl
 make -j6 && make install DESTDIR=%{buildroot}/etc/ssh/openssl
-
 %setup -q
 
 # 编译
