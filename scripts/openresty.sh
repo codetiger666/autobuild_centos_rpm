@@ -4,7 +4,7 @@ program_init(){
   cd rpm
   git clone https://github.com/nicholaschiasson/ngx_upstream_jdomain.git
   git clone https://github.com/GUI/nginx-upstream-dynamic-servers.git
-  cd $GIHUB_WORKSPACE
+  cd $GITHUB_WORKSPACE
   curl https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/systemctl-scripts/nginx.service > nginx.service
   curl https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/nginx/default.conf > default.conf
   curl https://raw.githubusercontent.com/codetiger666/linux/master/scripts/linux/nginx/nginx.conf > nginx.conf
