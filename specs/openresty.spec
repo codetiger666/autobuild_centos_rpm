@@ -51,9 +51,13 @@ if [ $1 == 1 ]; then
     mkdir -p /var/tmp/nginx/client_body
     mkdir -p /var/tmp/nginx/proxy_cache
     mkdir -p /var/tmp/nginx/uwsgi
+    mkdir -p /var/tmp/nginx/proxy_cache/enginx
     mkdir -p /var/tmp/nginx/fastcgi
+    mkdir -p /var/tmp/nginx/scgi
     mkdir -p /var/tmp/nginx/proxy_temp
+    chown -R nginx:nginx /var/tmp/nginx
     mkdir -p /var/log/nginx
+    chown -R nginx:nginx /var/log/nginx
     mkdir -p /usr/local/nginx/conf.d
 fi
 
@@ -80,7 +84,6 @@ if [ $1 == 0 ]; then
     rm -rf /usr/lib/systemd/system/nginx.service
     rm -rf /var/tmp/nginx
     rm -rf /var/log/nginx
-    rm -rf /usr/local/lib64/perl5/auto/nginx
     userdel nginx
     systemctl daemon-reload
 fi
@@ -89,10 +92,9 @@ fi
 %files
 %defattr(-,root,root,0755)
 %{_usr}/lib64/perl5/perllocal.pod
-%{_usr}/local/lib64/perl5/auto/nginx/nginx.so
-%{_usr}/local/lib64/perl5/auto/nginx/nginx.bs
-%{_usr}/local/lib64/perl5/nginx.pm
-%{_usr}/local/lib64/perl5/auto/nginx/.packlist
+%{_usr}/local/lib64/perl5/codetiger_perl_version/auto/nginx/.packlist
+%{_usr}/local/lib64/perl5/codetiger_perl_version/auto/nginx/nginx.so
+%{_usr}/local/lib64/perl5/codetiger_perl_version/nginx.pm
 %{_usr}/local/share/man/man3/nginx.3pm
 %{_sbindir}/nginx
 %{_usr}/local/nginx/

@@ -48,6 +48,14 @@ jobs:
           /usr/share/dotnet \
           /etc/mysql \
           /etc/php
+
+    # 初始化环境变量
+    - name: init-env
+      run: |
+        echo "export project_program=${{ github.event.inputs.program }}" >> $HOME/.profile
+        echo "export project_version=${{ github.event.inputs.version }}" >> $HOME/.profile
+        echo "export project_arch=${{ github.event.inputs.arch }}" >> $HOME/.profile
+        source $HOME/.profile
  
     - name: run-rocky
       # 出错继续
@@ -91,6 +99,7 @@ jobs:
           source ./scripts/${{ github.event.inputs.program }}.sh
           program_init
         fi
+        sudo /bin/cp specs/${{ github.event.inputs.program }}.spec rpm/rpmbuild/SPECS/${{ github.event.inputs.program }}.spec
 
     # 编译
     - name: build
