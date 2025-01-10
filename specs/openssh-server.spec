@@ -31,7 +31,7 @@ make -j6
 make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}/etc/ssh/sshd_config
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
-%{__install} -p -D -m 0644 %{Source2} %{buildroot}/etc/ssh/sshd_config
+%{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}/etc/ssh/sshd_config
 
 # 安装后操作
 %post
