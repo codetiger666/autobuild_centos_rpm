@@ -27,7 +27,11 @@ on:
         remove:
           description: '是否删除历史版本'
           required: false
-          default: 'true'
+          default: 'false'
+          type: choice
+          options:
+            - 'true'
+            - 'false'
         arch:
           description: '架构'
           required: true
