@@ -68,7 +68,7 @@ jobs:
             ;;
           *)
             echo "未知架构，请检查"
-            exit(0)
+            exit 0
             ;;
         esac
         echo "export centos=$centos" >> $HOME/.profile
