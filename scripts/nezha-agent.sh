@@ -7,7 +7,7 @@ program_init(){
   if [ "${project_arch}" = "aarch64" ]; then
     ARCH=arm64
   fi
-  sudo sed -i "s/odetiger_arch/${ARCH}/g" specs/nezha-agent.spec
+  sudo sed -i "s/codetiger_arch/${ARCH}/g" specs/nezha-agent.spec
   wget https://github.com/nezhahq/agent/releases/download/v${project_version}/nezha-agent_linux_${ARCH}.zip
   sudo /bin/cp specs/nezha-agent.spec rpm/rpmbuild/SPECS/nezha-agent.spec
   mkdir rpm/rpmbuild/SOURCES -p

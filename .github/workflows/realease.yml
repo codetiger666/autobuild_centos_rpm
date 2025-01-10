@@ -27,7 +27,7 @@ on:
         remove:
           description: '是否删除历史版本'
           required: false
-          default: 'false'
+          default: 'true'
           type: choice
           options:
             - 'true'
