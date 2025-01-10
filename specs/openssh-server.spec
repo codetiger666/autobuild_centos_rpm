@@ -29,7 +29,10 @@ make -j6 && make install
 
 # 编译
 %build
-CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/usr/ssh/openssl --with-selinux --with-ssl-engine CPPFLAGS="-I/usr/ssh/openssl/include" LDFLAGS="-L/usr/ssh/openssl/lib"
+export CPPFLAGS="-I/usr/ssh/openssl/include"
+export LDFLAGS="-L/usr/ssh/openssl/lib"
+export LD_LIBRARY_PATH="/usr/ssh/openssl/lib:$LD_LIBRARY_PATH"
+CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/usr/ssh/openssl --with-selinux
 make -j6
 
 # 安装
