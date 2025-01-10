@@ -7,6 +7,7 @@ License:        GPL
 URL:            https://gybyt.cn
 Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-server-%{version}.tar.gz
 Source1:        sshd.service
+Source2:        sshd_config
 
 BuildRequires:  openssl-devel == openssl_version
 BuildRequires:  zlib-devel gcc libselinux-devel
@@ -28,7 +29,9 @@ make -j6
 # 安装
 %install
 make install DESTDIR=%{buildroot}
+rm -rf %{buildroot}/etc/ssh/sshd_config
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
+%{__install} -p -D -m 0644 %{Source2} %{buildroot}/etc/ssh/sshd_config
 
 # 安装后操作
 %post
