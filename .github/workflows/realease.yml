@@ -76,14 +76,6 @@ jobs:
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
         docker exec -i $centos rpmdev-setuptree
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
-        
-    - name: init
-      run: |
-        if [ -f "./scripts/${{ github.event.inputs.program }}.sh" ];
-        then
-          source ./scripts/${{ github.event.inputs.program }}.sh
-          program_init
-        fi
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@main
@@ -91,6 +83,14 @@ jobs:
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+    - name: init
+      run: |
+        if [ -f "./scripts/${{ github.event.inputs.program }}.sh" ];
+        then
+          source ./scripts/${{ github.event.inputs.program }}.sh
+          program_init
+        fi
 
     # 编译
     - name: build
