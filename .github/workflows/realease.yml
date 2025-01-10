@@ -94,6 +94,7 @@ jobs:
 
     - name: init
       run: |
+        source $HOME/.profile
         if [ -f "./scripts/${{ github.event.inputs.program }}.sh" ];
         then
           source ./scripts/${{ github.event.inputs.program }}.sh
@@ -118,6 +119,7 @@ jobs:
       # 出错继续
       # continue-on-error: true
       run: |
+        source $HOME/.profile
         sudo mkdir -p centos_rpms/rocky/9/${{ github.event.inputs.arch }}/
         cd centos_rpms
         git pull
