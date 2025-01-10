@@ -142,6 +142,10 @@ jobs:
       # continue-on-error: true
       run: |
         source $HOME/.profile
+        if command -v program_release > /dev/null 2>&1;
+        then
+          program_release
+        fi
         sudo mkdir -p centos_rpms/rocky/9/${{ github.event.inputs.arch }}/
         cd centos_rpms
         git pull
