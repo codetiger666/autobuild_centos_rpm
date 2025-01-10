@@ -13,6 +13,6 @@ program_init(){
   sudo /bin/cp nginx.conf rpm/rpmbuild/SOURCES
   sudo sed -i "s/codetiger_version/${project_program}/g" specs/openresty.spec
   sudo sed -i "s/codetiger_perl_version/${PERLVERSION}/g" specs/openresty.spec
-  wget https://openresty.org/download/openresty-$OPENRESTYVERSION.tar.gz
-  sudo /bin/cp openresty-$OPENRESTYVERSION.tar.gz rpm/rpmbuild/SOURCES/
+  wget https://openresty.org/download/openresty-${project_version}.tar.gz
+  sudo /bin/cp openresty-${project_version}.tar.gz rpm/rpmbuild/SOURCES/
 }
