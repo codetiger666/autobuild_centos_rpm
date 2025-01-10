@@ -23,19 +23,25 @@ cp %{SOURCE3} %{_builddir}
 cd %{_builddir}
 tar -xf %{SOURCE3}
 cd openssl-codetiger_openssl_version
-./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
+./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl --disable-man --disable-doc
 make -j6 && make install
 %setup -q
 
 # 编译
 %build
-CFLAGS="-fPIC" ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/usr/ssh/openssl --with-selinux
+export PATH=/usr/ssh/openssl/bin:$PATH
+CFLAGS="-fPIC -I/usr/ssh/openssl/include" \
+CPPFLAGS="-I/usr/ssh/openssl/include" \
+LDFLAGS="-L/usr/ssh/openssl/lib" \
+./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/usr/ssh/openssl --with-selinux
 make -j6
 
 # 安装
 %install
 make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}/etc/ssh/sshd_config
+mkdir -p %{buildroot}/usr/ssh/openssl
+/bin/cp /usr/ssh/openssl %{buildroot}/usr/ssh/openssl
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
 %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}/etc/ssh/sshd_config
 
@@ -69,6 +75,7 @@ fi
 %{_usr}/bin/ssh-agent
 %{_usr}/bin/ssh-keygen
 %{_usr}/bin/ssh-keyscan
+%{usr}/ssh/openssl
 %{_usr}/lib/systemd/system/sshd.service
 %{_usr}/libexec/sftp-server
 %{_usr}/libexec/ssh-keysign
