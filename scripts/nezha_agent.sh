@@ -16,7 +16,3 @@ program_init(){
   sudo /bin/cp nezha/agent.conf rpm/rpmbuild/SOURCES
   sudo /bin/cp services/nezha-agent.service rpm/rpmbuild/SOURCES
 }
-
-program_release(){
-  /bin/cp rpm/rpmbuild/RPMS/${project_arch}/${project_program}_${{ github.event.inputs.version }}-1.el9.${{ github.event.inputs.arch }}.rpm rpm/rpmbuild/RPMS/${project_arch}/${project_program}-${{ github.event.inputs.version }}-1.el9.${{ github.event.inputs.arch }}.rpm
-}
