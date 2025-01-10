@@ -23,7 +23,7 @@ cp %{SOURCE3} %{_builddir}
 cd %{_builddir}
 tar -xf %{SOURCE3}
 cd openssl-codetiger_openssl_version
-./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl --disable-man --disable-doc
+./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
 make -j6 && make install
 %setup -q
 
