@@ -139,9 +139,16 @@ jobs:
         git pull
         git config --local user.email ${{ secrets.email }}
         git config --local user.name "codetiger666"
-        git add ./
-        git commit -m "update ${{ github.event.inputs.program }} ${{ github.event.inputs.arch }} ${{ github.event.inputs.version }}"
-        git pull
+        # 创建一个新的孤立分支
+        git checkout --orphan temp_main
+        # 添加所有文件并进行提交
+        git add -A
+        git commit -m "update"
+        # 删除旧的 main 分支并将新分支重命名为 main
+        git branch -D main
+        git branch -m main
+        git remote set-url origin https://${{ secrets.GITHUBTOKEN }}@github.com/codetiger666/centos_rpms.git
+        git push -f origin main
 
     - name: Pushes to another repository
       uses: cpina/github-action-push-to-another-repository@main
