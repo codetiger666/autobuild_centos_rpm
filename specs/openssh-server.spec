@@ -19,12 +19,14 @@ openssh-server编译
 
 %prep
 %setup -q
-# cp %{SOURCE3} %{_builddir}
-# cd %{_builddir}
-# tar -xf %{SOURCE3}
-# cd openssl-codetiger_openssl_version
-# ./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
-# make -j6 && make install
+cp %{SOURCE3} %{_builddir}
+cd %{_builddir}
+tar -xf %{SOURCE3}
+cd openssl-codetiger_openssl_version
+./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
+make -j6 && make install
+echo "/usr/ssh/openssl/lib64" > /etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
+/sbin/ldconfig
 
 # 编译
 %build
@@ -37,6 +39,8 @@ make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}/etc/ssh/sshd_config
 mkdir -p %{buildroot}/usr/ssh/openssl
 /bin/cp /usr/ssh/openssl %{buildroot}/usr/ssh/openssl
+mkdir -p /etc/ld.so.conf.d 2>&1 &
+/bin/cp /etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf %{buildroot}/etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
 %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}/etc/ssh/sshd_config
 
@@ -71,6 +75,7 @@ fi
 %{_usr}/bin/ssh-keygen
 %{_usr}/bin/ssh-keyscan
 %{usr}/ssh/openssl
+/etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
 %{_usr}/lib/systemd/system/sshd.service
 %{_usr}/libexec/sftp-server
 %{_usr}/libexec/ssh-keysign
