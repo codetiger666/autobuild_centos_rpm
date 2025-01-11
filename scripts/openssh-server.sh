@@ -18,5 +18,5 @@ program_init(){
   tar -xf openssl-${OPENSSL_VERSION}.tar.gz
   cd openssl-${OPENSSL_VERSION}
   ./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
-  make -j6 && make install
+  sudo make -j6 && sudo make install
 }
