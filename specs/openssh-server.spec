@@ -53,6 +53,7 @@ if [ $1 == 1 ]; then
     else
         ssh-keygen -A
     fi
+    /sbin/ldconfig
 fi
 
 # 卸载前准备
