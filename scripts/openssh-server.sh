@@ -3,7 +3,7 @@ OPENSSL_VERSION=3.4.0
 program_init(){
   # docker exec -i $centos dnf install -y zlib-devel libselinux-devel openssl-devel-$OPENSSL_VERSION
   sudo sed -i "s/codetiger_version/${project_version}/g" specs/openssh-server.spec
-  sudo sed -i "s/codetiger_openssl_version/$OPENSSL_VERSION/g" specs/openssh-server.spec
+  ca
   sudo /bin/cp specs/openssh-server.spec rpm/rpmbuild/SPECS/openssh-server.spec
   sudo /bin/cp services/sshd.service rpm/rpmbuild/SOURCES
   sudo /bin/cp openssh/sshd_config rpm/rpmbuild/SOURCES
