@@ -107,13 +107,6 @@ jobs:
         docker exec -i $centos rpmdev-setuptree
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
 
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@main
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-
     - name: init
       run: |
         source $HOME/.profile
@@ -123,6 +116,13 @@ jobs:
           program_init
         fi
         sudo /bin/cp specs/${{ github.event.inputs.program }}.spec rpm/rpmbuild/SPECS/${{ github.event.inputs.program }}.spec
+
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@main
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     # 编译
     - name: build
