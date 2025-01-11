@@ -39,7 +39,7 @@ make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}/etc/ssh/sshd_config
 mkdir -p %{buildroot}/usr/local/ssh
 /bin/cp -r /usr/local/ssh/openssl %{buildroot}/usr/local/ssh/openssl
-mkdir -p /etc/ld.so.conf.d 2>&1 &
+mkdir -p %{buildroot}/etc/ld.so.conf.d 2>&1 &
 /bin/cp /etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf %{buildroot}/etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/sshd.service
 %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}/etc/ssh/sshd_config
