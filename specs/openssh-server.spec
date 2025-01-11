@@ -8,7 +8,6 @@ URL:            https://gybyt.cn
 Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-server-%{version}.tar.gz
 Source1:        sshd.service
 Source2:        sshd_config
-Source3:        https://github.com/openssl/openssl/releases/download/openssl-codetiger_openssl_version/openssl-codetiger_openssl_version.tar.gz
 
 BuildRequires:  zlib-devel gcc libselinux-devel
 Requires: zlib libselinux
@@ -19,20 +18,9 @@ openssh-server编译
 
 %prep
 %setup -q
-cp %{SOURCE3} %{_builddir}
-cd %{_builddir}
-tar -xf %{SOURCE3}
-cd openssl-codetiger_openssl_version
-./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
-make -j6 && make install
-%setup -q
 
 # 编译
 %build
-export PATH=/usr/ssh/openssl/bin:$PATH
-CFLAGS="-fPIC -I/usr/ssh/openssl/include" \
-CPPFLAGS="-I/usr/ssh/openssl/include" \
-LDFLAGS="-L/usr/ssh/openssl/lib" \
 ./configure --prefix=/usr --sysconfdir=/etc/ssh --with-ssl-dir=/usr/ssh/openssl --with-selinux
 make -j6
 

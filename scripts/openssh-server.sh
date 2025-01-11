@@ -15,4 +15,8 @@ program_init(){
   mkdir rpm/rpmbuild/SOURCES -p
   sudo /bin/cp openssh-server-${project_version}.tar.gz rpm/rpmbuild/SOURCES/openssh-server-${project_version}.tar.gz
   sudo /bin/cp openssl-${OPENSSL_VERSION}.tar.gz rpm/rpmbuild/SOURCES/openssl-${OPENSSL_VERSION}.tar.gz
+  tar -xf openssl-${OPENSSL_VERSION}.tar.gz
+  cd openssl-${OPENSSL_VERSION}
+  ./config --prefix=/usr/ssh/openssl --openssldir=/usr/ssh/openssl
+  make -j6 && make install
 }
