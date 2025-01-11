@@ -75,7 +75,7 @@ fi
 %{_usr}/bin/ssh-agent
 %{_usr}/bin/ssh-keygen
 %{_usr}/bin/ssh-keyscan
-%{_usr}/ssh/openssl/
+%{_usr}/local/ssh/openssl/
 /etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
 %{_usr}/lib/systemd/system/sshd.service
 %{_usr}/libexec/sftp-server
