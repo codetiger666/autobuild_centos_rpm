@@ -25,7 +25,7 @@ tar -xf %{SOURCE3}
 cd openssl-codetiger_openssl_version
 ./config --prefix=/usr/local/ssh/openssl --openssldir=/usr/local/ssh/openssl
 make -j6 && make install
-echo "/usr/local/ssh/openssl/lib64\n/usr/local/ssh/openssl/lib" > /etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
+echo -e "/usr/local/ssh/openssl/lib64\n/usr/local/ssh/openssl/lib" > /etc/ld.so.conf.d/opensslcodetiger_openssl_version.conf
 /sbin/ldconfig
 
 # 编译
