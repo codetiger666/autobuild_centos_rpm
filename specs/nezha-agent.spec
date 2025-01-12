@@ -12,12 +12,13 @@ Source3:        agent.conf
 
 %description
 
-
+# 编译前准备
 %prep
 rm -rf %{_builddir}/*
 cp %{SOURCE0} %{_builddir}
 unzip -d %{name}-%{version} %{SOURCE0}
 
+# 安装前准备
 %pre
 if [ $1 == 1 ]; then
     id nezha &> /dev/null
@@ -27,6 +28,7 @@ if [ $1 == 1 ]; then
     fi
 fi
 
+# 安装
 %install
 %{__mkdir} -p %{buildroot}/usr/local/nezha
 cp %{name}-%{version}/nezha-agent %{buildroot}/usr/local/nezha/nezha-agent
@@ -40,6 +42,24 @@ if [ $1 == 1 ]; then
     chown -R nezha:nezha /usr/local/nezha
 fi
 
+# 卸载前准备
+%preun
+if [ $1 == 0 ]; then
+    %if 0%{?use_systemd}
+        if [ -f /usr/lib/systemd/system/nezha-agent.service ]; then
+        %systemd_preun nezha-agent.service
+        fi
+    %endif
+fi
+
+# 卸载后步骤
+%postun
+if [ $1 == 0 ]; then
+    groupdel nezha 2> /dev/null
+    userdel nezha 2> /dev/null
+fi
+
+# 文件列表
 %files
 %{_usr}/local/nezha/nezha-agent
 %{_usr}/local/nezha/nezha-agent.sh

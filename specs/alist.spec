@@ -10,7 +10,7 @@ Source1:        alist.sh
 
 %description
 
-
+# 编译前准备
 %prep
 rm -rf %{_builddir}/*
 cd %{_builddir}
@@ -45,7 +45,7 @@ cd %{_builddir}/
 mkdir -p %{name}-%{version}
 cp ./alist/alist %{name}-%{version}/alist
 
-
+# 安装前准备
 %pre
 if [ $1 == 1 ]; then
     id alist &> /dev/null
@@ -55,6 +55,7 @@ if [ $1 == 1 ]; then
     fi
 fi
 
+# 安装
 %install
 %{__mkdir} -p %{buildroot}/usr/local/alist
 cp %{name}-%{version}/alist %{buildroot}/usr/local/alist/alist
@@ -80,12 +81,11 @@ fi
 # 卸载后步骤
 %postun
 if [ $1 == 0 ]; then
-    systemctl disable alist
-    userdel alist
-    groupdel alist
-    systemctl daemon-reload
+    userdel alist 2> /dev/null
+    groupdel alist 2> /dev/null
 fi
 
+# 文件列表
 %files
 %{_usr}/local/alist/alist
 %{_usr}/local/alist/alist.sh

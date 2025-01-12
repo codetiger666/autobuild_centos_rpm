@@ -12,14 +12,14 @@ Source2:        frps.service
 
 %description
 
-
+# 编译前准备
 %prep
 rm -rf %{_builddir}/*
 cp %{SOURCE0} %{_builddir}
 tar xf %{SOURCE0}
 mv frp_%{version}_linux_codetiger_arch %{name}-%{version}
 
-
+# 安装
 %install
 %{__mkdir} -p %{buildroot}/usr/local/frp
 cp %{name}-%{version}/frpc* %{buildroot}/usr/local/frp
@@ -27,6 +27,17 @@ cp %{name}-%{version}/frps* %{buildroot}/usr/local/frp
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/lib/systemd/system/frpc.service
 %{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}%{_usr}/lib/systemd/system/frps.service
 
+# 卸载前准备
+%preun
+if [ $1 == 0 ]; then
+    %if 0%{?use_systemd}
+        if [ -f /usr/lib/systemd/system/frp.service ]; then
+        %systemd_preun frp.service
+        fi
+    %endif
+fi
+
+# 文件列表
 %files
 %{_usr}/local/frp/frpc
 %{_usr}/local/frp/frps

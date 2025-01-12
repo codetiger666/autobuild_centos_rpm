@@ -16,6 +16,7 @@ BuildRequires:  sqlite-devel
 %description
 onedrive编译
 
+# 编译前准备
 %prep
 %setup -q
 
@@ -24,12 +25,13 @@ onedrive编译
 CFLAGS="-fPIC" ./configure
 make -j6
 
+# 安装前准备
 %pre
 if [ $1 == 1 ]; then
     id 3000 &> /dev/null
     if [ $? -ne 0 ]
     then
-    groupadd onedrive -g 3000
+    groupadd onedrive -g 3000 2> /dev/null
     useradd onedrive -s /sbin/nologin -u 3000 -g 3000 2> /dev/null
     fi
 fi
@@ -61,8 +63,8 @@ fi
 # 卸载后步骤
 %postun
 if [ $1 == 0 ]; then
-    systemctl disable onedrive
-    systemctl daemon-reload
+    groupdel onedrive 2> /dev/null
+    userdel onedrive 2> /dev/null
 fi
 
 # 文件列表

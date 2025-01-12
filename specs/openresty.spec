@@ -78,14 +78,13 @@ fi
 # 卸载后步骤
 %postun
 if [ $1 == 0 ]; then
-    systemctl disable nginx
     rm -rf /var/tmp/nginx/proxy
     rm -rf /var/tmp/nginx/client_body
     rm -rf /usr/lib/systemd/system/nginx.service
     rm -rf /var/tmp/nginx
     rm -rf /var/log/nginx
-    userdel nginx
-    systemctl daemon-reload
+    userdel nginx 2> /dev/null
+    groupadd nginx 2> /dev/null
 fi
 
 # 文件列表
