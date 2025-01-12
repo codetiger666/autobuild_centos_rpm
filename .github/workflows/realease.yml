@@ -54,7 +54,7 @@ env:
 
 jobs:     
   centos-build-rpms:
-    name: build-rpms-${{ github.event.inputs.program }}
+    name: build-rpms-${{ github.event.inputs.program }}-${{ github.event.inputs.arch }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
