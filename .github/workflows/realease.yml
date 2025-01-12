@@ -12,6 +12,7 @@ on:
             - onedrive
             - openssh-server
             - frp
+            - alist
         version:
           description: '软件版本'
           required: true
