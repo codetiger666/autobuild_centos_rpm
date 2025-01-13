@@ -7,6 +7,8 @@ License:        GPL
 URL:            https://gybyt.cn
 Source0:        https://www.kernel.org/pub/software/scm/git/git-%{version}.tar.gz
 
+# 禁用 strip 操作
+%define __os_install_post %{nil}
 
 # 描述
 %description
