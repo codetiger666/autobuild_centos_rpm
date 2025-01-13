@@ -1,10 +1,8 @@
 PCRE_VERSION=5
-PCRE_SMALL_VERSION=32
 
 program_init(){
   sudo sed -i "s/codetiger_version/${project_version}/g" specs/git.spec
-  sudo sed -i "s/codetiger_pcre/${PCRE_VERSION}/g" specs/git.spec
-  sudo sed -i "s/codetiger_small_pcre/${PCRE_SMALL_VERSION}/g" specs/git.spec
+  sudo sed -i "s/codetiger_perl_version/${PCRE_VERSION}/g" specs/git.spec
   wget https://www.kernel.org/pub/software/scm/git/git-${project_version}.tar.gz
   sudo /bin/cp specs/git.spec rpm/rpmbuild/SPECS/git.spec
   docker exec -i $centos dnf remove -y openssh*
