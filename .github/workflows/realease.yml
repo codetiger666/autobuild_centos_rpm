@@ -157,7 +157,6 @@ jobs:
         cd ..
         sudo /bin/cp rpm/rpmbuild/RPMS/${{ github.event.inputs.arch }}/${{ github.event.inputs.program }}-${{ github.event.inputs.version }}-1.el9.${{ github.event.inputs.arch }}.rpm centos_rpms/rocky/9/${{ github.event.inputs.arch }}/
         rpms=`docker run -itd -v $(pwd)/centos_rpms:/centos_rpms rockylinux:9`
-        docker exec -i $rpms dnf install createrepo -y
         docker exec -i $rpms createrepo /centos_rpms/rocky/9/${{ github.event.inputs.arch }}/ 
 
     - name: git add
