@@ -30,11 +30,9 @@ cp %{name}-%{version}/frps* %{buildroot}/usr/local/frp
 # 卸载前准备
 %preun
 if [ $1 == 0 ]; then
-    %if 0%{?use_systemd}
-        if [ -f /usr/lib/systemd/system/frp.service ]; then
-        %systemd_preun frp.service
-        fi
-    %endif
+    if [ -f /usr/lib/systemd/system/frp.service ]; then
+    %systemd_preun frp.service
+    fi
 fi
 
 # 文件列表
