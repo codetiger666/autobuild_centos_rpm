@@ -26,7 +26,7 @@ Source4:        web-vault
 # 安装后操作
 %post
 if [ $1 == 1 ]; then
-    useradd -u 3000 -o vaultwarden 2>/dev/null
+    useradd -u 3000 -o vaultwarden || true
     chown -R vaultwarden:3000 /usr/local/vaultwarden
 fi
 
@@ -41,7 +41,7 @@ fi
 # 卸载后步骤
 %postun
 if [ $1 == 0 ]; then
-    userdel vaultwarden 2> /dev/null
+    userdel vaultwarden || true
 fi
 
 # 文件列表
