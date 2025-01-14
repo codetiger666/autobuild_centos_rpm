@@ -71,11 +71,9 @@ fi
 # 卸载前准备
 %preun
 if [ $1 == 0 ]; then
-    %if 0%{?use_systemd}
-        if [ -f /usr/lib/systemd/system/alist.service ]; then
-        %systemd_preun alist.service
-        fi
-    %endif
+    if [ -f /usr/lib/systemd/system/alist.service ]; then
+    %systemd_preun alist.service
+    fi
 fi
 
 # 卸载后步骤
