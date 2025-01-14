@@ -10,9 +10,9 @@ program_init(){
   wget https://github.com/czyt/vaultwarden-binary/releases/download/${project_version}-extracted/vaultwarden-linux-${ARCH}-extracted.zip
   sudo /bin/cp specs/vaultwarden.spec rpm/rpmbuild/SPECS/vaultwarden.spec
   mkdir rpm/rpmbuild/SOURCES -p
-  unzip vaultwarden-linux-${ARCH}-extracted.zip
-  sudo /bin/cp vaultwarden rpm/rpmbuild/SOURCES
-  sudo /bin/cp -ra web-vault rpm/rpmbuild/SOURCES
+  unzip vaultwarden-linux-${ARCH}-extracted.zip -d extracted
+  sudo /bin/cp extracted/vaultwarden rpm/rpmbuild/SOURCES
+  sudo /bin/cp -ra extracted/web-vault rpm/rpmbuild/SOURCES
   sudo /bin/cp services/vaultwarden.service rpm/rpmbuild/SOURCES
   sudo /bin/cp vaultwarden/vaultwarden.sh rpm/rpmbuild/SOURCES
   sudo /bin/cp vaultwarden/.env rpm/rpmbuild/SOURCES
