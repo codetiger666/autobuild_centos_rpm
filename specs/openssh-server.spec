@@ -10,6 +10,10 @@ Source1:        sshd.service
 Source2:        sshd_config
 Source3:        https://github.com/openssl/openssl/releases/download/openssl-codetiger_openssl_version/openssl-codetiger_openssl_version.tar.gz
 
+# 别名 用来代替openssh openssh-clients
+Provides: alias1 = openssh-%{version}
+Provides: alias2 = openssh-clients-%{version}
+
 BuildRequires:  zlib-devel gcc libselinux-devel
 Requires: zlib libselinux
 
