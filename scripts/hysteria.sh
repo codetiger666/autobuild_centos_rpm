@@ -15,6 +15,7 @@ program_init(){
   mkdir rpm/rpmbuild/SOURCES -p
   sudo /bin/cp hysteria-linux-${ARCH} rpm/rpmbuild/SOURCES/hysteria
   sudo /bin/cp hysteria/hysteria.sh rpm/rpmbuild/SOURCES
+  sudo /bin/cp hysteria/config.yaml rpm/rpmbuild/SOURCES
   sudo /bin/cp services/hysteria.service rpm/rpmbuild/SOURCES
   sudo /bin/cp server.key rpm/rpmbuild/SOURCES
   sudo /bin/cp server.crt rpm/rpmbuild/SOURCES
