@@ -10,6 +10,7 @@ Source1:        gitea.sh
 Source2:        config
 Source3:        gitea.service
     
+Requires:       git
 
 %description
 
