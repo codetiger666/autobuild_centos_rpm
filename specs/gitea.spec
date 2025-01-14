@@ -32,11 +32,9 @@ fi
 # 卸载前准备
 %preun
 if [ $1 == 0 ]; then
-    %if 0%{?use_systemd}
-        if [ -f /usr/lib/systemd/system/gitea.service ]; then
-        %systemd_preun gitea.service
-        fi
-    %endif
+    if [ -f /usr/lib/systemd/system/gitea.service ]; then
+    %systemd_preun gitea.service
+    fi
 fi
 
 # 文件列表
