@@ -16,6 +16,7 @@ on:
             - alist
             - git
             - vaultwarden
+            - hysteria
         version:
           description: '软件版本'
           required: true
