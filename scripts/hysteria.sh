@@ -8,7 +8,7 @@ program_init(){
     ARCH=arm64
   fi
   openssl genpkey -algorithm RSA -out server.key
-  openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -days 365 -nodes -config openssl.cnf
+  openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -days 365 -nodes -config hysteria/openssl.cnf
   sudo sed -i "s/codetiger_arch/${ARCH}/g" specs/hysteria.spec
   wget https://github.com/apernet/hysteria/releases/download/app%2Fv${project_version}/hysteria-linux-${ARCH}
   sudo /bin/cp specs/hysteria.spec rpm/rpmbuild/SPECS/hysteria.spec
