@@ -10,7 +10,6 @@ Source1:        config.yaml
 Source2:        hysteria.sh
 Source3:        server.key
 Source4:        server.crt
-Source4:        server.crt
 Source5:        hysteria.service
 
 %description
