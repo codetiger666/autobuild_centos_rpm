@@ -135,7 +135,7 @@ jobs:
         docker stop $centos
         docker start $centos
         docker cp $GITHUB_WORKSPACE/.rpmmacros $centos:/root/.rpmmacros
-        docker exec -i $centos rpmbuild -ba /opt/rpmbuild/SPECS/${{ github.event.inputs.program }}.spec
+        docker exec -i $centos rpmbuild -ba --with systemd /opt/rpmbuild/SPECS/${{ github.event.inputs.program }}.spec
         
     - name: checkout_rpm
       run: |
