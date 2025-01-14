@@ -39,13 +39,10 @@ fi
 %files
 %{_usr}/local/frp/frpc
 %{_usr}/local/frp/frps
-%{_usr}/local/frp/frpc.toml
-%{_usr}/local/frp/frps.toml
 %{_usr}/lib/systemd/system/frpc.service
 %{_usr}/lib/systemd/system/frps.service
-%config
-%{_usr}/local/frp/frpc.toml
-%{_usr}/local/frp/frps.toml
+%config(noreplace) %{_usr}/local/frp/frpc.toml
+%config(noreplace) %{_usr}/local/frp/frps.toml
 %doc
 
 %changelog
