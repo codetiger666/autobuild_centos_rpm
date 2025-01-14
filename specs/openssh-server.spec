@@ -1,3 +1,5 @@
+# 自定义clients名称
+%define client_name openssh-clients
 Name:           openssh-server
 Version:        codetiger_version
 Release:        1%{?dist}
@@ -12,7 +14,7 @@ Source3:        https://github.com/openssl/openssl/releases/download/openssl-cod
 
 # 别名 用来代替openssh openssh-clients
 Provides: alias1 = openssh-%{version}
-Provides: alias2 = openssh-clients-%{version}
+Provides: alias2 = %{client_name}-%{version}
 
 BuildRequires:  zlib-devel gcc libselinux-devel
 Requires: zlib libselinux
