@@ -50,8 +50,7 @@ fi
 %{_usr}/local/vaultwarden/vaultwarden.sh
 %{_usr}/local/vaultwarden/web-vault/
 %{_usr}/lib/systemd/system/vaultwarden.service
-%config(noreplace)
-%{_usr}/local/vaultwarden/.env
+%config(noreplace) %{_usr}/local/vaultwarden/.env
 %doc
 
 %changelog
