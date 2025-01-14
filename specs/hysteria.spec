@@ -19,8 +19,8 @@ Source5:        hysteria.service
 %install
 %{__mkdir} -p %{buildroot}/usr/local/hysteria
 %{__install} -p -D -m 0755 %{SOURCE0} %{buildroot}%{_usr}/local/hysteria/hysteria
-%{__install} -p -D -m 0755 %{SOURCE1} %{buildroot}%{_usr}/local/hysteria/config.yaml
-%{__install} -p -D -m 0644 %{SOURCE2} %{buildroot}%{_usr}/local/hysteria/hysteria.sh
+%{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_usr}/local/hysteria/config.yaml
+%{__install} -p -D -m 0755 %{SOURCE2} %{buildroot}%{_usr}/local/hysteria/hysteria.sh
 %{__install} -p -D -m 0644 %{SOURCE3} %{buildroot}%{_usr}/local/hysteria/server.key
 %{__install} -p -D -m 0644 %{SOURCE4} %{buildroot}%{_usr}/local/hysteria/server.crt
 %{__install} -p -D -m 0644 %{SOURCE5} %{buildroot}%{_usr}/lib/systemd/system/hysteria.service
