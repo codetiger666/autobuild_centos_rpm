@@ -42,8 +42,7 @@ fi
 %{_usr}/local/gitea/gitea
 %{_usr}/local/gitea/gitea.sh
 %{_usr}/lib/systemd/system/gitea.service
-%config
-%{_usr}/local/gitea/config
+%config(noreplace) %{_usr}/local/gitea/config
 %doc
 
 %changelog
