@@ -64,10 +64,9 @@ fi
 # 卸载前准备
 %preun
 if [ $1 == 0 ]; then
-    %if 0%{?use_systemd}
-        if [ -f /usr/lib/systemd/system/nginx.service ]; then
-        %systemd_preun nginx.service
-        fi
+    if [ -f /usr/lib/systemd/system/nginx.service ]; then
+    %systemd_preun nginx.service
+    fi
     %endif
     count=`ps -ef |grep nginx |grep -v "grep" |wc -l`
     if [ $count -gt 0 ]; then
