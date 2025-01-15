@@ -1,1 +1,1 @@
-# autobuild_centos_rpm
+# 私有编译源仓库
